@@ -251,8 +251,9 @@
         formData.append('hasCommercialRegister', this.hasCommercialRegister.value);
         formData.append('hasOffice',             this.hasOffice.value);
 
-        // ✅ الإصلاح: إرسال packageType تلقائياً بدون ما يختارها المستخدم
-        formData.append('packageType', 'basic');
+        // ✅ بيتبعتوا تلقائياً للباك اند من غير ما يظهروا في الفورم
+        formData.append('packageType',   'basic');
+        formData.append('businessModel', 'غير محدد');
 
         btn.disabled = true;
         submitText.classList.add('hidden');
