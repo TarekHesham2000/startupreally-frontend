@@ -44,8 +44,6 @@ function mapApiProject(submission) {
         hasCommercialRegister: submission.hasCommercialRegister   || false,
         hasOffice:             submission.hasOffice               || false,
         businessModel:         submission.businessModel           || '—',
-        packageType:           submission.packageType             || '—',
-        packagePrice:          submission.packagePrice            || '—',
         createdAt:             submission.createdAt               || '',
     };
 }
