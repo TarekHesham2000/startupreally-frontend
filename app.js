@@ -13,8 +13,6 @@ let loadedProjects = [];
 // تحويل بيانات الـ API لـ format موحد
 // ==========================================
 function mapApiProject(submission) {
-    // الـ status من الباك اند: "pending" | "verified" | "funded"
-    // نحوّلها لعربي للعرض
     const statusMap = {
         pending:  { label: 'قيد التمويل', style: 'bg-orange-500 text-white' },
         verified: { label: 'موثق',        style: 'bg-blue-500 text-white'   },
@@ -29,18 +27,16 @@ function mapApiProject(submission) {
         amountNeeded:          submission.project?.amountNeeded   || 0,
         equityPercentage:      submission.project?.equityPercentage || 0,
         financialStudy:        submission.project?.financialStudy || '—',
-        interestedInvestors:   0,   // مش موجود في الـ API حالياً — هتضيفه لاحقاً
+        interestedInvestors:   0,
         statusLabel:           statusInfo.label,
         statusStyle:           statusInfo.style,
         verified:              submission.status === 'verified' || submission.status === 'funded',
         thumbnail:             submission.video?.thumbnailUrl     || 'https://picsum.photos/id/201/600/400',
         videoUrl:              submission.video?.secure_url       || '',
         videoDuration:         submission.video?.duration         || 0,
-        // بيانات صاحب المشروع
         fullName:              submission.user?.fullName          || '—',
         phone:                 submission.user?.phone             || '—',
         email:                 submission.user?.email             || '—',
-        // بيانات إضافية
         partnershipType:       submission.partnershipType         || '—',
         projectStatus:         submission.projectStatus           || '—',
         projectDuration:       submission.projectDuration         || '—',
@@ -60,7 +56,6 @@ function mapApiProject(submission) {
 async function fetchProjects() {
     const grid = document.getElementById('projects-grid');
 
-    // Loading state
     grid.innerHTML = `
         <div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
             <i class="fa-solid fa-spinner fa-spin text-4xl text-emerald-500 mb-4"></i>
@@ -71,19 +66,12 @@ async function fetchProjects() {
     try {
         const response = await fetch(API_ENDPOINTS.getAllProjects, {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                // 'Authorization': 'Bearer YOUR_TOKEN'  // فعّل لو الـ endpoint محتاج auth
-            }
+            headers: { 'Content-Type': 'application/json' }
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const json = await response.json();
-
-        // استخراج المشاريع من الـ response بناءً على الـ structure
         const submissions = json?.message?.data?.submissions || [];
 
         if (submissions.length === 0) {
@@ -96,7 +84,6 @@ async function fetchProjects() {
             return;
         }
 
-        // تحويل البيانات وحفظها
         loadedProjects = submissions.map(mapApiProject);
         renderProjects(loadedProjects);
 
@@ -125,43 +112,30 @@ function renderProjects(projects) {
         const card = document.createElement('div');
         card.className = 'project-card bg-white rounded-3xl overflow-hidden border border-gray-100';
         card.innerHTML = `
-            <!-- الصورة المصغرة مع زرار الفيديو -->
             <div class="relative cursor-pointer group" onclick="openVideo('${project.videoUrl}', '${project.projectName}')">
                 <img src="${project.thumbnail}" class="w-full h-56 object-cover"
                      onerror="this.src='https://picsum.photos/id/201/600/400'">
-
-                <!-- طبقة تعتيم عند الهوفر -->
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-xl">
                         <i class="fa-solid fa-play text-emerald-600 text-2xl" style="margin-right:-3px"></i>
                     </div>
                 </div>
-
-                <!-- أيقونة مدة الفيديو -->
                 <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-xl text-xs flex items-center gap-1">
                     <i class="fa-solid fa-play text-[10px]"></i>
                     ${project.videoDuration ? formatDuration(project.videoDuration) : 'شاهد الفيديو'}
                 </div>
-
-                <!-- بادج الحالة -->
                 <div class="absolute top-4 right-4 px-4 py-1 rounded-3xl text-xs font-bold ${project.statusStyle}">
                     ${project.statusLabel}
                 </div>
-
-                <!-- بادج موثق -->
                 ${project.verified
                     ? `<div class="absolute top-4 left-4 bg-white px-3 py-1 rounded-2xl text-xs font-bold flex items-center gap-1 shadow">
                            ✅ موثق
                        </div>`
                     : ''}
             </div>
-
-            <!-- محتوى الكارت -->
             <div class="p-5">
                 <h3 class="font-bold text-lg mb-1 line-clamp-2">${project.projectName}</h3>
                 <p class="text-gray-500 text-sm line-clamp-2 mb-4">${project.projectDescription}</p>
-
-                <!-- المبلغ والنسبة -->
                 <div class="flex justify-between text-sm mb-4 bg-gray-50 rounded-2xl px-4 py-3">
                     <div>
                         <span class="text-gray-400 text-xs">المبلغ المطلوب</span><br>
@@ -172,8 +146,6 @@ function renderProjects(projects) {
                         <span class="font-bold text-xl">${project.equityPercentage}%</span>
                     </div>
                 </div>
-
-                <!-- عدد المستثمرين + زرار التفاصيل -->
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2 text-sm text-gray-600">
                         <i class="fa-solid fa-users text-emerald-600"></i>
@@ -184,8 +156,6 @@ function renderProjects(projects) {
                         <i class="fa-solid fa-circle-info"></i> التفاصيل
                     </button>
                 </div>
-
-                <!-- زرار واتساب -->
                 <button onclick="contactWhatsApp('${project.phone}')"
                     class="whatsapp-btn w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-2xl font-bold flex items-center justify-center gap-2 text-sm shadow-lg">
                     <i class="fa-brands fa-whatsapp text-lg"></i>
@@ -205,7 +175,7 @@ function openVideo(videoUrl, title) {
     const modal   = document.getElementById('videoModal');
     const videoEl = document.getElementById('projectVideo');
     const titleEl = document.getElementById('videoTitle');
-    videoEl.src       = videoUrl;
+    videoEl.src        = videoUrl;
     titleEl.textContent = title;
     modal.classList.remove('hidden');
     modal.classList.add('flex');
@@ -231,8 +201,6 @@ function openDetails(id) {
     const body = document.getElementById('detailsBody');
     body.innerHTML = `
         <div class="space-y-5 text-sm">
-
-            <!-- بيانات صاحب المشروع -->
             <div>
                 <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-user text-emerald-600"></i> بيانات صاحب المشروع
@@ -244,8 +212,6 @@ function openDetails(id) {
                     ${detailRow('تاريخ التقديم', formatDate(project.createdAt))}
                 </div>
             </div>
-
-            <!-- تفاصيل المشروع -->
             <div>
                 <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-lightbulb text-emerald-600"></i> تفاصيل المشروع
@@ -257,8 +223,6 @@ function openDetails(id) {
                     ${detailRowFull('الإنجازات حتى الآن', project.achievementsSoFar)}
                 </div>
             </div>
-
-            <!-- التفاصيل المالية -->
             <div>
                 <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-money-bill text-emerald-600"></i> التفاصيل المالية
@@ -270,8 +234,6 @@ function openDetails(id) {
                     ${detailRow('نموذج العمل', project.businessModel)}
                 </div>
             </div>
-
-            <!-- الوضع القانوني -->
             <div>
                 <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-building text-emerald-600"></i> الوضع القانوني
@@ -283,7 +245,6 @@ function openDetails(id) {
                     ${detailRow('مقر إداري', project.hasOffice ? '✅ نعم' : '❌ لا')}
                 </div>
             </div>
-
         </div>
     `;
 
@@ -313,11 +274,6 @@ function detailRowFull(label, value) {
     </div>`;
 }
 
-function packageBadge(pkg) {
-    const map = { basic: '🥉 أساسية', pro: '🥈 Pro', premium: '🥇 Premium' };
-    return map[pkg] || pkg;
-}
-
 function formatDuration(seconds) {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
@@ -332,10 +288,9 @@ function formatDate(isoString) {
 }
 
 // ==========================================
-// التواصل عبر واتساب — بيفتح على رقم صاحب المشروع
+// التواصل عبر واتساب
 // ==========================================
 function contactWhatsApp(phone) {
-    // تنظيف الرقم وإضافة كود مصر لو مش موجود
     let number = phone.replace(/\D/g, '');
     if (number.startsWith('0')) number = '2' + number;
     window.open(
@@ -371,10 +326,8 @@ function animateCounter(id, target, suffix = '') {
 // تهيئة الصفحة عند التحميل
 // ==========================================
 window.onload = function () {
-    // جلب المشاريع من الـ API
     fetchProjects();
 
-    // أنيميشن الأرقام بعد 800ms
     setTimeout(() => {
         animateCounter('stat1', 247);
         animateCounter('stat2', 1850);
@@ -382,7 +335,6 @@ window.onload = function () {
         animateCounter('stat4', 98);
     }, 800);
 
-    // إغلاق المودالات بالضغط على الخلفية
     document.getElementById('videoModal').addEventListener('click', function (e) {
         if (e.target === this) closeVideo();
     });

@@ -216,14 +216,8 @@
 </div>
 
 <script>
-    // ==========================================
-    // إعدادات الـ API
-    // ==========================================
     const API_URL = 'https://startupname-production.up.railway.app/auth/createProjectSubmission';
 
-    // ==========================================
-    // عرض / إخفاء الخطأ
-    // ==========================================
     function showError(msg) {
         document.getElementById('errorText').textContent = msg;
         document.getElementById('errorMsg').classList.remove('hidden');
@@ -233,9 +227,6 @@
         document.getElementById('errorMsg').classList.add('hidden');
     }
 
-    // ==========================================
-    // إرسال الفورم
-    // ==========================================
     document.getElementById('projectForm').addEventListener('submit', async function (e) {
         e.preventDefault();
         hideError();
@@ -244,9 +235,6 @@
         const submitText    = document.getElementById('submitText');
         const submitSpinner = document.getElementById('submitSpinner');
 
-        // ==========================================
-        // تجميع البيانات بنفس أسماء الـ backend
-        // ==========================================
         const formData = new FormData();
 
         formData.append('fullName',              this.fullName.value.trim());
@@ -263,7 +251,9 @@
         formData.append('hasCommercialRegister', this.hasCommercialRegister.value);
         formData.append('hasOffice',             this.hasOffice.value);
 
-        // Loading state
+        // ✅ الإصلاح: إرسال packageType تلقائياً بدون ما يختارها المستخدم
+        formData.append('packageType', 'basic');
+
         btn.disabled = true;
         submitText.classList.add('hidden');
         submitSpinner.classList.remove('hidden');
@@ -272,8 +262,6 @@
             const response = await fetch(API_URL, {
                 method: 'POST',
                 body: formData
-                // لو الـ endpoint محمي فعّل السطر ده:
-                // headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
             });
 
             if (!response.ok) {
@@ -281,7 +269,6 @@
                 throw new Error(err.message || `خطأ من السيرفر: ${response.status}`);
             }
 
-            // ✅ نجاح — عرض صفحة تأكيد
             document.querySelector('.form-card').innerHTML = `
                 <div class="p-12 text-center">
                     <div class="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
