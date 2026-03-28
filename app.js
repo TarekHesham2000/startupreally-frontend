@@ -241,8 +241,6 @@ function openDetails(id) {
                     ${detailRow('الاسم', project.fullName)}
                     ${detailRow('التليفون', `<a href="tel:${project.phone}" class="text-emerald-600 font-bold">${project.phone}</a>`)}
                     ${detailRow('الإيميل', `<a href="mailto:${project.email}" class="text-emerald-600">${project.email}</a>`)}
-                    ${detailRow('الباقة', packageBadge(project.packageType))}
-                    ${detailRow('سعر الباقة', project.packagePrice + ' جنيه')}
                     ${detailRow('تاريخ التقديم', formatDate(project.createdAt))}
                 </div>
             </div>
