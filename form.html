@@ -7,12 +7,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
         body { font-family: 'Cairo', system-ui, sans-serif; }
         .form-card { transition: all 0.3s; }
         .form-card:hover { box-shadow: 0 20px 25px -5px rgb(16 185 129 / 0.2); }
     </style>
 </head>
-<body class="bg-gray-50 py-12">
+<body class="bg-gray-50 py-10">
+
+<!-- زرار الرجوع -->
+<div class="max-w-4xl mx-auto px-4 sm:px-6 mb-4">
+    <a href="index.html" class="inline-flex items-center gap-2 text-emerald-600 font-bold hover:underline">
+        <i class="fa-solid fa-arrow-right"></i> الرجوع للرئيسية
+    </a>
+</div>
 
 <div class="max-w-4xl mx-auto px-4 sm:px-6">
     <div class="bg-white rounded-3xl shadow-xl form-card overflow-hidden">
@@ -23,39 +31,30 @@
             <p class="text-emerald-100 mt-2 text-sm sm:text-base">املأ البيانات بعناية عشان نعرض مشروعك بشكل احترافي</p>
         </div>
 
-        <form id="projectForm" class="p-6 sm:p-8 space-y-10">
+        <form id="projectForm" class="p-6 sm:p-8 space-y-10" enctype="multipart/form-data">
 
             <!-- ===== البيانات الشخصية ===== -->
             <div>
                 <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                    <i class="fa-solid fa-user"></i> البيانات الشخصية
+                    <span class="w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-user text-emerald-600 text-sm"></i>
+                    </span>
+                    البيانات الشخصية
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium mb-2">الاسم الكامل <span class="text-red-500">*</span></label>
-                        <input
-                            type="text"
-                            name="full_name"
-                            required
-                            placeholder="مثال: أحمد محمد علي"
+                        <input type="text" name="fullName" required placeholder="مثال: أحمد محمد علي"
                             class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-emerald-600">
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-2">رقم التليفون <span class="text-red-500">*</span></label>
-                        <input
-                            type="tel"
-                            name="phone"
-                            required
-                            placeholder="01XXXXXXXXX"
+                        <input type="tel" name="phone" required placeholder="01XXXXXXXXX"
                             class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-emerald-600">
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium mb-2">الإيميل <span class="text-red-500">*</span></label>
-                        <input
-                            type="email"
-                            name="email"
-                            required
-                            placeholder="example@email.com"
+                        <input type="email" name="email" required placeholder="example@email.com"
                             class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-emerald-600">
                     </div>
                 </div>
@@ -64,35 +63,28 @@
             <!-- ===== بيانات المشروع ===== -->
             <div>
                 <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                    <i class="fa-solid fa-lightbulb"></i> بيانات المشروع
+                    <span class="w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-lightbulb text-emerald-600 text-sm"></i>
+                    </span>
+                    بيانات المشروع
                 </h2>
                 <div class="space-y-6">
                     <div>
                         <label class="block text-sm font-medium mb-2">اسم المشروع <span class="text-red-500">*</span></label>
-                        <input
-                            type="text"
-                            name="project_name"
-                            required
-                            placeholder="مثال: تطبيق توصيل خضار من المزارعين"
+                        <input type="text" name="projectName" required placeholder="مثال: تطبيق توصيل خضار من المزارعين"
                             class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-emerald-600">
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-2">وصف المشروع <span class="text-red-500">*</span></label>
                         <p class="text-xs text-gray-500 mb-2">اشرح المشكلة اللي بيحلها مشروعك + الحل + المميزات</p>
-                        <textarea
-                            name="project_description"
-                            required
-                            rows="5"
+                        <textarea name="projectDescription" required rows="5"
                             placeholder="مثال: بيربط المزارعين بالزبائن مباشرة بدون وسيط ويوفر 30% من التكلفة..."
                             class="w-full border border-gray-300 rounded-3xl px-5 py-4 focus:outline-none focus:border-emerald-600"></textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-2">الدراسة المالية والتوقعات <span class="text-red-500">*</span></label>
                         <p class="text-xs text-gray-500 mb-2">الأرباح المتوقعة + التكاليف + توقعات النمو</p>
-                        <textarea
-                            name="financial_study"
-                            required
-                            rows="4"
+                        <textarea name="financialStudy" required rows="4"
                             placeholder="مثال: التكلفة الشهرية 5000 جنيه، الإيراد المتوقع بعد 6 شهور 15,000 جنيه..."
                             class="w-full border border-gray-300 rounded-3xl px-5 py-4 focus:outline-none focus:border-emerald-600"></textarea>
                     </div>
@@ -100,28 +92,24 @@
             </div>
 
             <!-- ===== المالية والشراكة ===== -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-sm font-medium mb-2">المبلغ المطلوب (جنيه) <span class="text-red-500">*</span></label>
-                    <input
-                        type="number"
-                        name="funding_amount"
-                        required
-                        min="1000"
-                        placeholder="مثال: 50000"
-                        class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-emerald-600">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2">النسبة المطروحة (%) <span class="text-red-500">*</span></label>
-                    <input
-                        type="number"
-                        name="equity_percentage"
-                        required
-                        step="0.1"
-                        min="1"
-                        max="100"
-                        placeholder="مثال: 20"
-                        class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-emerald-600">
+            <div>
+                <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                    <span class="w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-money-bill text-emerald-600 text-sm"></i>
+                    </span>
+                    التفاصيل المالية
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">المبلغ المطلوب (جنيه) <span class="text-red-500">*</span></label>
+                        <input type="number" name="amountNeeded" required min="1000" placeholder="مثال: 50000"
+                            class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-emerald-600">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">النسبة المطروحة (%) <span class="text-red-500">*</span></label>
+                        <input type="number" name="equityPercentage" required step="0.1" min="1" max="100" placeholder="مثال: 20"
+                            class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-emerald-600">
+                    </div>
                 </div>
             </div>
 
@@ -130,19 +118,19 @@
                 <label class="block text-sm font-medium mb-3">نوع الشراكة المطلوبة <span class="text-red-500">*</span></label>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <label class="flex items-center gap-3 border rounded-2xl p-4 cursor-pointer hover:border-emerald-500 transition">
-                        <input type="radio" name="partnership_type" value="تمويل فقط" required class="w-5 h-5 accent-emerald-600">
+                        <input type="radio" name="partnershipType" value="تمويل فقط" required class="w-5 h-5 accent-emerald-600">
                         <span class="text-sm">تمويل فقط</span>
                     </label>
                     <label class="flex items-center gap-3 border rounded-2xl p-4 cursor-pointer hover:border-emerald-500 transition">
-                        <input type="radio" name="partnership_type" value="شريك عامل" class="w-5 h-5 accent-emerald-600">
+                        <input type="radio" name="partnershipType" value="شريك عامل" class="w-5 h-5 accent-emerald-600">
                         <span class="text-sm">شريك عامل</span>
                     </label>
                     <label class="flex items-center gap-3 border rounded-2xl p-4 cursor-pointer hover:border-emerald-500 transition">
-                        <input type="radio" name="partnership_type" value="استشاري" class="w-5 h-5 accent-emerald-600">
+                        <input type="radio" name="partnershipType" value="استشاري" class="w-5 h-5 accent-emerald-600">
                         <span class="text-sm">استشاري</span>
                     </label>
                     <label class="flex items-center gap-3 border rounded-2xl p-4 cursor-pointer hover:border-emerald-500 transition">
-                        <input type="radio" name="partnership_type" value="مزيج" class="w-5 h-5 accent-emerald-600">
+                        <input type="radio" name="partnershipType" value="مزيج" class="w-5 h-5 accent-emerald-600">
                         <span class="text-sm">مزيج</span>
                     </label>
                 </div>
@@ -152,9 +140,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-medium mb-2">حالة المشروع <span class="text-red-500">*</span></label>
-                    <select
-                        name="project_status"
-                        required
+                    <select name="projectStatus" required
                         class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-emerald-600">
                         <option value="">اختر الحالة</option>
                         <option value="فكرة فقط">لسه فكرة فقط</option>
@@ -163,10 +149,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2">مدة العمل حتى الآن</label>
-                    <input
-                        type="text"
-                        name="project_duration"
-                        placeholder="مثال: شهرين، سنة، ..."
+                    <input type="text" name="projectDuration" placeholder="مثال: شهرين، سنة، ..."
                         class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-emerald-600">
                 </div>
             </div>
@@ -177,11 +160,11 @@
                     <label class="block text-sm font-medium mb-3">هل لديك سجل تجاري؟ <span class="text-red-500">*</span></label>
                     <div class="flex gap-6">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="has_commercial_register" value="نعم" required class="accent-emerald-600 w-4 h-4">
+                            <input type="radio" name="hasCommercialRegister" value="true" required class="accent-emerald-600 w-4 h-4">
                             <span>نعم</span>
                         </label>
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="has_commercial_register" value="لا" class="accent-emerald-600 w-4 h-4">
+                            <input type="radio" name="hasCommercialRegister" value="false" class="accent-emerald-600 w-4 h-4">
                             <span>لا</span>
                         </label>
                     </div>
@@ -190,11 +173,11 @@
                     <label class="block text-sm font-medium mb-3">هل لديك مقر إداري؟ <span class="text-red-500">*</span></label>
                     <div class="flex gap-6">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="has_office" value="نعم" required class="accent-emerald-600 w-4 h-4">
+                            <input type="radio" name="hasOffice" value="true" required class="accent-emerald-600 w-4 h-4">
                             <span>نعم</span>
                         </label>
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="has_office" value="لا" class="accent-emerald-600 w-4 h-4">
+                            <input type="radio" name="hasOffice" value="false" class="accent-emerald-600 w-4 h-4">
                             <span>لا</span>
                         </label>
                     </div>
@@ -204,7 +187,7 @@
             <!-- ===== إقرار المخاطر ===== -->
             <div class="bg-amber-50 border border-amber-200 rounded-3xl p-6">
                 <label class="flex items-start gap-3 cursor-pointer">
-                    <input type="checkbox" name="risk_acknowledgement" required class="mt-1 accent-emerald-600 w-5 h-5">
+                    <input type="checkbox" name="riskAcknowledgment" required class="mt-1 accent-emerald-600 w-5 h-5">
                     <span class="text-sm text-gray-700">
                         أقر بأنني فاهم تمامًا أن الاستثمار في المشاريع ينطوي على مخاطر مالية وقد أخسر كل أو جزء من رأس المال،
                         وأنا المسؤول الرئيسي عن نجاح أو فشل مشروعي.
@@ -213,13 +196,15 @@
             </div>
 
             <!-- ===== رسالة الخطأ ===== -->
-            <div id="errorMsg" class="hidden bg-red-50 border border-red-200 text-red-700 rounded-2xl px-5 py-4 text-sm"></div>
+            <div id="errorMsg" class="hidden bg-red-50 border border-red-200 text-red-700 rounded-2xl px-5 py-4 text-sm flex items-start gap-3">
+                <i class="fa-solid fa-circle-exclamation mt-0.5 shrink-0"></i>
+                <span id="errorText"></span>
+            </div>
 
             <!-- ===== زر الإرسال ===== -->
-            <button
-                type="submit"
-                id="submitBtn"
+            <button type="submit" id="submitBtn"
                 class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-5 sm:py-6 rounded-3xl text-lg sm:text-xl font-bold shadow-lg transition flex items-center justify-center gap-3">
+                <i class="fa-solid fa-paper-plane"></i>
                 <span id="submitText">إرسال الطلب ودفع الباقة</span>
                 <span id="submitSpinner" class="hidden">
                     <i class="fa-solid fa-spinner fa-spin"></i> جاري الإرسال...
@@ -231,72 +216,77 @@
 </div>
 
 <script>
+    const API_URL = 'https://startupname-production.up.railway.app/auth/createProjectSubmission';
+
+    function showError(msg) {
+        document.getElementById('errorText').textContent = msg;
+        document.getElementById('errorMsg').classList.remove('hidden');
+        document.getElementById('errorMsg').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function hideError() {
+        document.getElementById('errorMsg').classList.add('hidden');
+    }
+
     document.getElementById('projectForm').addEventListener('submit', async function (e) {
         e.preventDefault();
+        hideError();
 
-        const btn = document.getElementById('submitBtn');
-        const submitText = document.getElementById('submitText');
+        const btn           = document.getElementById('submitBtn');
+        const submitText    = document.getElementById('submitText');
         const submitSpinner = document.getElementById('submitSpinner');
-        const errorMsg = document.getElementById('errorMsg');
 
-        // إخفاء الخطأ القديم
-        errorMsg.classList.add('hidden');
+        const formData = new FormData();
 
-        // تجميع البيانات من الفورم
-        const formData = {
-            full_name: this.full_name.value.trim(),
-            phone: this.phone.value.trim(),
-            email: this.email.value.trim(),
-            project_name: this.project_name.value.trim(),
-            project_description: this.project_description.value.trim(),
-            financial_study: this.financial_study.value.trim(),
-            funding_amount: Number(this.funding_amount.value),
-            equity_percentage: Number(this.equity_percentage.value),
-            partnership_type: this.partnership_type.value,
-            project_status: this.project_status.value,
-            project_duration: this.project_duration.value.trim(),
-            has_commercial_register: this.has_commercial_register.value,
-            has_office: this.has_office.value,
-            risk_acknowledgement: this.risk_acknowledgement.checked,
-            submitted_at: new Date().toISOString()
-        };
+        formData.append('fullName',              this.fullName.value.trim());
+        formData.append('phone',                 this.phone.value.trim());
+        formData.append('email',                 this.email.value.trim());
+        formData.append('projectName',           this.projectName.value.trim());
+        formData.append('projectDescription',    this.projectDescription.value.trim());
+        formData.append('financialStudy',        this.financialStudy.value.trim());
+        formData.append('amountNeeded',          this.amountNeeded.value);
+        formData.append('equityPercentage',      this.equityPercentage.value);
+        formData.append('partnershipType',       this.partnershipType.value);
+        formData.append('projectStatus',         this.projectStatus.value);
+        formData.append('projectDuration',       this.projectDuration.value.trim());
+        formData.append('hasCommercialRegister', this.hasCommercialRegister.value);
+        formData.append('hasOffice',             this.hasOffice.value);
 
-        // Loading state
+        // ✅ بيتبعتوا تلقائياً للباك اند من غير ما يظهروا في الفورم
+        formData.append('packageType',   'basic');
+        formData.append('businessModel', 'أونلاين فقط');
+
         btn.disabled = true;
         submitText.classList.add('hidden');
         submitSpinner.classList.remove('hidden');
 
         try {
-            // ======================================================
-            // ربط الـ Backend هنا — بدّل الـ URL بالـ endpoint الفعلي
-            // ======================================================
-            const response = await fetch('https://your-backend-api.com/api/projects', {
+            const response = await fetch(API_URL, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // 'Authorization': 'Bearer YOUR_TOKEN'  // لو محتاج auth
-                },
-                body: JSON.stringify(formData)
+                body: formData
             });
 
             if (!response.ok) {
-                // لو الـ backend رجّع error
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.message || `خطأ من السيرفر: ${response.status}`);
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.message || `خطأ من السيرفر: ${response.status}`);
             }
 
-            const result = await response.json();
-
-            // نجاح
-            alert('✅ تم استلام طلبك بنجاح!\n\nسنقوم بمراجعة مشروعك وإنتاج الفيديو الاحترافي خلال 48 ساعة.\nشكراً لثقتك في StartupRelly 💚');
-            this.reset();
+            document.querySelector('.form-card').innerHTML = `
+                <div class="p-12 text-center">
+                    <div class="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fa-solid fa-circle-check text-emerald-500 text-5xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-black text-gray-800 mb-3">تم إرسال طلبك بنجاح! 🎉</h2>
+                    <p class="text-gray-500 text-lg mb-2">سنراجع مشروعك ونتواصل معك خلال <strong>48 ساعة</strong></p>
+                    <p class="text-gray-400 text-sm mb-8">تحقق من إيميلك للتأكيد</p>
+                    <a href="index.html"
+                        class="inline-flex items-center gap-2 bg-emerald-600 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-emerald-700 transition">
+                        <i class="fa-solid fa-house"></i> الرجوع للرئيسية
+                    </a>
+                </div>
+            `;
 
         } catch (err) {
-            // عرض الخطأ للمستخدم
-            errorMsg.textContent = 'حدث خطأ أثناء الإرسال: ' + err.message;
-            errorMsg.classList.remove('hidden');
-        } finally {
-            // إرجاع الزرار لحالته
+            showError(err.message);
             btn.disabled = false;
             submitText.classList.remove('hidden');
             submitSpinner.classList.add('hidden');
