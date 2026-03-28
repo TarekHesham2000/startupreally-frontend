@@ -43,7 +43,6 @@ function mapApiProject(submission) {
         achievementsSoFar:     submission.achievementsSoFar       || '—',
         hasCommercialRegister: submission.hasCommercialRegister   || false,
         hasOffice:             submission.hasOffice               || false,
-        businessModel:         submission.businessModel           || '—',
         createdAt:             submission.createdAt               || '',
     };
 }
@@ -229,7 +228,6 @@ function openDetails(id) {
                     ${detailRow('المبلغ المطلوب', Number(project.amountNeeded).toLocaleString() + ' جنيه')}
                     ${detailRow('الحصة المطروحة', project.equityPercentage + '%')}
                     ${detailRow('نوع الشراكة', project.partnershipType)}
-                    ${detailRow('نموذج العمل', project.businessModel)}
                 </div>
             </div>
             <div>
