@@ -1,98 +1,123 @@
 // ==========================================
-// بيانات المشاريع — هتيجي من الباك اند
+// إعدادات الـ API
 // ==========================================
-const sampleProjects = [
-    {
-        id: 1,
-        projectName: "تطبيق توصيل خضار من المزارعين في مينيا",
-        projectDescription: "يربط المزارعين بالزبائن مباشرة ويوفر 30% من التكلفة بدون وسيط",
-        amountNeeded: 185000,
-        equityPercentage: 18,
-        interestedInvestors: 14,
-        status: "قيد التمويل",   // "جديد" | "قيد التمويل" | "ممول"
-        verified: true,
-        thumbnail: "https://picsum.photos/id/201/600/400",
-        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
-        // بيانات التفاصيل الكاملة من الباك اند
-        fullName: "أحمد محمد علي",
-        phone: "01123456789",
-        email: "ahmed@example.com",
-        financialStudy: "التكاليف المتوقعة 185 ألف جنيه، إيراد متوقع في السنة الأولى 400 ألف جنيه",
-        partnershipType: "تمويل فقط",
-        projectStatus: "بدأ فعلاً",
-        projectDuration: "3 أشهر",
-        achievementsSoFar: "تم تصميم التطبيق وربط 12 مزارع بالمنصة",
-        hasCommercialRegister: false,
-        hasOffice: false,
-        businessModel: "عمولة 5% على كل طلبية",
-        packageType: "pro"
-    },
-    {
-        id: 2,
-        projectName: "مصنع صغير لمنتجات الحلويات الطبيعية",
-        projectDescription: "منتجات بدون سكر ومن مواد محلية 100% — جاهز للتوسع في السوق المصر  سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محل سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100% سكر ومن مواد محلية 100%ية 100% سكر ومن مواد محلية 100%ي",
-        amountNeeded: 420000,
-        equityPercentage: 25,
-        interestedInvestors: 27,
-        status: "ممول",
-        verified: true,
-        thumbnail: "https://picsum.photos/id/29/600/400",
-        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
-        fullName: "سارة خالد",
-        phone: "01012345678",
-        email: "sara@example.com",
-        financialStudy: "تكاليف 420 ألف، إيراد متوقع 900 ألف في السنة الأولى",
-        partnershipType: "شريك عامل",
-        projectStatus: "بدأ فعلاً",
-        projectDuration: "سنة كاملة",
-        achievementsSoFar: "تم إنتاج وبيع أول دفعة 500 وحدة",
-        hasCommercialRegister: true,
-        hasOffice: true,
-        businessModel: "بيع مباشر + توزيع لمحلات",
-        packageType: "premium"
-    },
-    {
-        id: 3,
-        projectName: "خدمة غسيل سيارات متنقلة بالكهرباء",
-        projectDescription: "أول خدمة خضراء في الصعيد — موفرة وصديقة للبيئة بدون ماء",
-        amountNeeded: 75000,
-        equityPercentage: 12,
-        interestedInvestors: 9,
-        status: "جديد",
-        verified: false,
-        thumbnail: "https://picsum.photos/id/160/600/400",
-        videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
-        fullName: "كريم يوسف",
-        phone: "01234567890",
-        email: "karim@example.com",
-        financialStudy: "تكاليف 75 ألف، ربح شهري متوقع 8 آلاف جنيه",
-        partnershipType: "تمويل فقط",
-        projectStatus: "فكرة فقط",
-        projectDuration: "—",
-        achievementsSoFar: "تم عمل دراسة الجدوى والحصول على عروض أسعار المعدات",
-        hasCommercialRegister: false,
-        hasOffice: false,
-        businessModel: "اشتراك شهري + حجز عبر واتساب",
-        packageType: "basic"
-    }
-];
+const API_BASE_URL = 'https://startupname-production.up.railway.app';
+const API_ENDPOINTS = {
+    getAllProjects: `${API_BASE_URL}/auth/getAllProjectSubmissions`,
+};
+
+// مصفوفة المشاريع المحمّلة من الـ API — بنستخدمها في openDetails
+let loadedProjects = [];
 
 // ==========================================
-// ألوان الحالة
+// تحويل بيانات الـ API لـ format موحد
 // ==========================================
-function getStatusStyle(status) {
-    switch (status) {
-        case 'ممول':        return 'bg-emerald-600 text-white';
-        case 'قيد التمويل': return 'bg-orange-500 text-white';
-        case 'جديد':        return 'bg-blue-500 text-white';
-        default:            return 'bg-gray-400 text-white';
+function mapApiProject(submission) {
+    // الـ status من الباك اند: "pending" | "verified" | "funded"
+    // نحوّلها لعربي للعرض
+    const statusMap = {
+        pending:  { label: 'قيد التمويل', style: 'bg-orange-500 text-white' },
+        verified: { label: 'موثق',        style: 'bg-blue-500 text-white'   },
+        funded:   { label: 'ممول',        style: 'bg-emerald-600 text-white' },
+    };
+    const statusInfo = statusMap[submission.status] || { label: 'جديد', style: 'bg-gray-400 text-white' };
+
+    return {
+        id:                    submission._id || submission.id,
+        projectName:           submission.project?.name           || '—',
+        projectDescription:    submission.project?.description    || '—',
+        amountNeeded:          submission.project?.amountNeeded   || 0,
+        equityPercentage:      submission.project?.equityPercentage || 0,
+        financialStudy:        submission.project?.financialStudy || '—',
+        interestedInvestors:   0,   // مش موجود في الـ API حالياً — هتضيفه لاحقاً
+        statusLabel:           statusInfo.label,
+        statusStyle:           statusInfo.style,
+        verified:              submission.status === 'verified' || submission.status === 'funded',
+        thumbnail:             submission.video?.thumbnailUrl     || 'https://picsum.photos/id/201/600/400',
+        videoUrl:              submission.video?.secure_url       || '',
+        videoDuration:         submission.video?.duration         || 0,
+        // بيانات صاحب المشروع
+        fullName:              submission.user?.fullName          || '—',
+        phone:                 submission.user?.phone             || '—',
+        email:                 submission.user?.email             || '—',
+        // بيانات إضافية
+        partnershipType:       submission.partnershipType         || '—',
+        projectStatus:         submission.projectStatus           || '—',
+        projectDuration:       submission.projectDuration         || '—',
+        achievementsSoFar:     submission.achievementsSoFar       || '—',
+        hasCommercialRegister: submission.hasCommercialRegister   || false,
+        hasOffice:             submission.hasOffice               || false,
+        businessModel:         submission.businessModel           || '—',
+        packageType:           submission.packageType             || '—',
+        packagePrice:          submission.packagePrice            || '—',
+        createdAt:             submission.createdAt               || '',
+    };
+}
+
+// ==========================================
+// جلب المشاريع من الـ API
+// ==========================================
+async function fetchProjects() {
+    const grid = document.getElementById('projects-grid');
+
+    // Loading state
+    grid.innerHTML = `
+        <div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
+            <i class="fa-solid fa-spinner fa-spin text-4xl text-emerald-500 mb-4"></i>
+            <p class="font-medium">جاري تحميل المشاريع...</p>
+        </div>
+    `;
+
+    try {
+        const response = await fetch(API_ENDPOINTS.getAllProjects, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': 'Bearer YOUR_TOKEN'  // فعّل لو الـ endpoint محتاج auth
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const json = await response.json();
+
+        // استخراج المشاريع من الـ response بناءً على الـ structure
+        const submissions = json?.message?.data?.submissions || [];
+
+        if (submissions.length === 0) {
+            grid.innerHTML = `
+                <div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
+                    <i class="fa-solid fa-folder-open text-4xl mb-4"></i>
+                    <p class="font-medium">لا توجد مشاريع متاحة حالياً</p>
+                </div>
+            `;
+            return;
+        }
+
+        // تحويل البيانات وحفظها
+        loadedProjects = submissions.map(mapApiProject);
+        renderProjects(loadedProjects);
+
+    } catch (err) {
+        console.error('خطأ في تحميل المشاريع:', err);
+        grid.innerHTML = `
+            <div class="col-span-full flex flex-col items-center justify-center py-20 text-red-400">
+                <i class="fa-solid fa-triangle-exclamation text-4xl mb-4"></i>
+                <p class="font-medium">حدث خطأ في تحميل المشاريع</p>
+                <button onclick="fetchProjects()" class="mt-4 bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-700 transition">
+                    حاول مرة أخرى
+                </button>
+            </div>
+        `;
     }
 }
 
 // ==========================================
 // عرض كروت المشاريع
 // ==========================================
-function renderProjects(projects = sampleProjects) {
+function renderProjects(projects) {
     const grid = document.getElementById('projects-grid');
     grid.innerHTML = '';
 
@@ -100,25 +125,27 @@ function renderProjects(projects = sampleProjects) {
         const card = document.createElement('div');
         card.className = 'project-card bg-white rounded-3xl overflow-hidden border border-gray-100';
         card.innerHTML = `
-            <!-- الصورة المصغرة مع زرار تشغيل الفيديو -->
+            <!-- الصورة المصغرة مع زرار الفيديو -->
             <div class="relative cursor-pointer group" onclick="openVideo('${project.videoUrl}', '${project.projectName}')">
-                <img src="${project.thumbnail}" class="w-full h-56 object-cover">
+                <img src="${project.thumbnail}" class="w-full h-56 object-cover"
+                     onerror="this.src='https://picsum.photos/id/201/600/400'">
 
                 <!-- طبقة تعتيم عند الهوفر -->
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-xl">
-                        <i class="fa-solid fa-play text-emerald-600 text-2xl mr-[-3px]"></i>
+                        <i class="fa-solid fa-play text-emerald-600 text-2xl" style="margin-right:-3px"></i>
                     </div>
                 </div>
 
-                <!-- أيقونة بلاي صغيرة دايمة -->
+                <!-- أيقونة مدة الفيديو -->
                 <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-xl text-xs flex items-center gap-1">
-                    <i class="fa-solid fa-play text-[10px]"></i> شاهد الفيديو
+                    <i class="fa-solid fa-play text-[10px]"></i>
+                    ${project.videoDuration ? formatDuration(project.videoDuration) : 'شاهد الفيديو'}
                 </div>
 
                 <!-- بادج الحالة -->
-                <div class="absolute top-4 right-4 px-4 py-1 rounded-3xl text-xs font-bold ${getStatusStyle(project.status)}">
-                    ${project.status}
+                <div class="absolute top-4 right-4 px-4 py-1 rounded-3xl text-xs font-bold ${project.statusStyle}">
+                    ${project.statusLabel}
                 </div>
 
                 <!-- بادج موثق -->
@@ -146,20 +173,20 @@ function renderProjects(projects = sampleProjects) {
                     </div>
                 </div>
 
-                <!-- زرار التفاصيل + عدد المستثمرين -->
+                <!-- عدد المستثمرين + زرار التفاصيل -->
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2 text-sm text-gray-600">
                         <i class="fa-solid fa-users text-emerald-600"></i>
                         <span>${project.interestedInvestors} مستثمر مهتم</span>
                     </div>
-                    <button onclick="openDetails(${project.id})"
+                    <button onclick="openDetails('${project.id}')"
                         class="text-xs border border-emerald-600 text-emerald-600 hover:bg-emerald-50 px-4 py-2 rounded-xl font-bold transition flex items-center gap-1">
                         <i class="fa-solid fa-circle-info"></i> التفاصيل
                     </button>
                 </div>
 
                 <!-- زرار واتساب -->
-                <button onclick="contactWhatsApp(${project.id})"
+                <button onclick="contactWhatsApp('${project.phone}')"
                     class="whatsapp-btn w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-2xl font-bold flex items-center justify-center gap-2 text-sm shadow-lg">
                     <i class="fa-brands fa-whatsapp text-lg"></i>
                     تواصل عبر واتساب
@@ -174,10 +201,11 @@ function renderProjects(projects = sampleProjects) {
 // مودال الفيديو
 // ==========================================
 function openVideo(videoUrl, title) {
-    const modal = document.getElementById('videoModal');
+    if (!videoUrl) return;
+    const modal   = document.getElementById('videoModal');
     const videoEl = document.getElementById('projectVideo');
     const titleEl = document.getElementById('videoTitle');
-    videoEl.src = videoUrl;
+    videoEl.src       = videoUrl;
     titleEl.textContent = title;
     modal.classList.remove('hidden');
     modal.classList.add('flex');
@@ -185,7 +213,7 @@ function openVideo(videoUrl, title) {
 }
 
 function closeVideo() {
-    const modal = document.getElementById('videoModal');
+    const modal   = document.getElementById('videoModal');
     const videoEl = document.getElementById('projectVideo');
     videoEl.pause();
     videoEl.src = '';
@@ -197,27 +225,29 @@ function closeVideo() {
 // مودال التفاصيل
 // ==========================================
 function openDetails(id) {
-    const project = sampleProjects.find(p => p.id === id);
+    const project = loadedProjects.find(p => p.id === id);
     if (!project) return;
 
     const body = document.getElementById('detailsBody');
     body.innerHTML = `
         <div class="space-y-5 text-sm">
 
-            <!-- معلومات صاحب المشروع -->
+            <!-- بيانات صاحب المشروع -->
             <div>
                 <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-user text-emerald-600"></i> بيانات صاحب المشروع
                 </h4>
                 <div class="bg-gray-50 rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                     ${detailRow('الاسم', project.fullName)}
-                    ${detailRow('التليفون', project.phone)}
-                    ${detailRow('الإيميل', project.email)}
+                    ${detailRow('التليفون', `<a href="tel:${project.phone}" class="text-emerald-600 font-bold">${project.phone}</a>`)}
+                    ${detailRow('الإيميل', `<a href="mailto:${project.email}" class="text-emerald-600">${project.email}</a>`)}
                     ${detailRow('الباقة', packageBadge(project.packageType))}
+                    ${detailRow('سعر الباقة', project.packagePrice + ' جنيه')}
+                    ${detailRow('تاريخ التقديم', formatDate(project.createdAt))}
                 </div>
             </div>
 
-            <!-- بيانات المشروع -->
+            <!-- تفاصيل المشروع -->
             <div>
                 <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-lightbulb text-emerald-600"></i> تفاصيل المشروع
@@ -268,31 +298,52 @@ function closeDetails() {
     document.getElementById('detailsModal').classList.remove('flex');
 }
 
-// helpers لعرض الصفوف
+// ==========================================
+// Helper functions
+// ==========================================
 function detailRow(label, value) {
     return `<div>
         <span class="text-gray-400 text-xs block">${label}</span>
         <span class="font-medium text-gray-800">${value}</span>
     </div>`;
 }
+
 function detailRowFull(label, value) {
     return `<div>
         <span class="text-gray-400 text-xs block mb-1">${label}</span>
-        <span class="font-medium text-gray-800 leading-relaxed">${value}</span>
+        <p class="font-medium text-gray-800 leading-relaxed">${value}</p>
     </div>`;
 }
+
 function packageBadge(pkg) {
     const map = { basic: '🥉 أساسية', pro: '🥈 Pro', premium: '🥇 Premium' };
     return map[pkg] || pkg;
 }
 
+function formatDuration(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${String(s).padStart(2, '0')}`;
+}
+
+function formatDate(isoString) {
+    if (!isoString) return '—';
+    return new Date(isoString).toLocaleDateString('ar-EG', {
+        year: 'numeric', month: 'long', day: 'numeric'
+    });
+}
+
 // ==========================================
-// التواصل عبر واتساب
+// التواصل عبر واتساب — بيفتح على رقم صاحب المشروع
 // ==========================================
-function contactWhatsApp(id) {
-    const numbers = ["201001234567", "201112345678", "201223456789"];
-    const random = numbers[Math.floor(Math.random() * numbers.length)];
-    window.open(`https://wa.me/${random}?text=مرحبا%20شفت%20مشروعك%20على%20StartupReally%20وعجبني!`, '_blank');
+function contactWhatsApp(phone) {
+    // تنظيف الرقم وإضافة كود مصر لو مش موجود
+    let number = phone.replace(/\D/g, '');
+    if (number.startsWith('0')) number = '2' + number;
+    window.open(
+        `https://wa.me/${number}?text=${encodeURIComponent('مرحبا، شفت مشروعك على StartupRelly وعجبني! هنقدر نتكلم؟')}`,
+        '_blank'
+    );
 }
 
 // ==========================================
@@ -322,7 +373,8 @@ function animateCounter(id, target, suffix = '') {
 // تهيئة الصفحة عند التحميل
 // ==========================================
 window.onload = function () {
-    renderProjects();
+    // جلب المشاريع من الـ API
+    fetchProjects();
 
     // أنيميشن الأرقام بعد 800ms
     setTimeout(() => {
@@ -340,5 +392,5 @@ window.onload = function () {
         if (e.target === this) closeDetails();
     });
 
-    console.log('%c✅ موقع StartupReally جاهز للتجربة!', 'color:#10b981; font-size:18px; font-weight:bold');
+    console.log('%c✅ StartupRelly متصل بالـ Backend!', 'color:#10b981; font-size:18px; font-weight:bold');
 };
