@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StartupReally | ربط أفكار الشباب بالتمويل</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- ملف الـ CSS الخاص بينا -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-50 text-gray-900">
+
+    <!-- ===== Navbar ===== -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+
+            <!-- اللوجو -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white text-xl sm:text-3xl font-black">
+                    SR
+                </div>
+                <div>
+                    <span class="text-xl sm:text-3xl font-black tracking-tighter tail-text">StartupReally</span>
+                    <p class="text-[10px] text-emerald-600 -mt-1">مصر 100%</p>
+                </div>
+            </div>
+
+            <!-- روابط - تتخفى على الموبايل -->
+            <div class="hidden md:flex items-center gap-6 lg:gap-8 text-base lg:text-lg font-medium">
+                <a href="#" class="hover:text-emerald-600 transition">الرئيسية</a>
+                <a href="#projects" class="hover:text-emerald-600 transition">المشاريع</a>
+                <a href="#packages" class="hover:text-emerald-600 transition">الباقات</a>
+                <a href="#how" class="hover:text-emerald-600 transition">كيف تعمل</a>
+            </div>
+
+            <!-- أزرار -->
+            <div class="flex gap-2 sm:gap-3">
+                <button onclick="showFormModal()"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 sm:px-8 py-2 sm:py-3 rounded-2xl font-bold flex items-center gap-1 sm:gap-2 shadow-lg text-sm sm:text-base">
+                    <i class="fa-solid fa-plus"></i>
+                    قدم مشروعك
+                </button>
+                <button onclick="alert('مرحباً بك كمستثمر! يمكنك تصفح المشاريع الآن')"
+                    class="border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 px-3 sm:px-6 py-2 sm:py-3 rounded-2xl font-bold text-sm sm:text-base flex items-center gap-2">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <span class="hidden sm:inline">أنا مستثمر</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- قائمة موبايل تحت الناف -->
+        <div class="md:hidden border-t border-gray-100 px-4 py-3 flex justify-around text-sm font-medium text-gray-700">
+            <a href="#" class="hover:text-emerald-600 transition">الرئيسية</a>
+            <a href="#projects" class="hover:text-emerald-600 transition">المشاريع</a>
+            <a href="#packages" class="hover:text-emerald-600 transition">الباقات</a>
+            <a href="#how" class="hover:text-emerald-600 transition">كيف تعمل</a>
+        </div>
+    </nav>
+
+    <!-- ===== Hero ===== -->
+    <header class="hero-bg text-white py-16 sm:py-20 md:py-28">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+
+            <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 sm:px-6 py-2 rounded-3xl text-xs sm:text-sm mb-5 sm:mb-6">
+                <span class="bg-emerald-500 text-white px-2 sm:px-3 py-1 rounded-2xl text-xs font-bold">جديد 2026</span>
+                <span>أكثر من 247 مشروع ممول حتى الآن</span>
+            </div>
+
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-5 sm:mb-6">
+                فكرتك تستاهل<br>
+                <span class="tail-text">تمويل حقيقي</span>
+            </h1>
+
+            <p class="text-base sm:text-xl md:text-2xl max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed">
+                منصة مصرية تربط الشباب صاحب الأفكار بالمستثمرين مباشرة.<br class="hidden sm:block">
+                فيديو احترافي + تسجيل باسمك + واتساب فوري
+            </p>
+
+            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
+                <button onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})"
+                    class="bg-white text-emerald-700 px-8 sm:px-12 py-4 sm:py-5 rounded-3xl text-lg sm:text-xl font-bold shadow-2xl flex items-center justify-center gap-3 hover:scale-105 transition">
+                    <i class="fa-solid fa-rocket"></i>
+                    شوف المشاريع
+                </button>
+                <button onclick="showFormModal()"
+                    class="bg-transparent border-4 border-white text-white px-8 sm:px-12 py-4 sm:py-5 rounded-3xl text-lg sm:text-xl font-bold hover:bg-white hover:text-emerald-700 transition">
+                    ابدأ مشروعك الآن
+                </button>
+            </div>
+
+            <!-- Trust badges -->
+            <div class="mt-10 sm:mt-16 flex flex-wrap justify-center gap-4 sm:gap-10 text-xs sm:text-sm">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-emerald-400 text-lg sm:text-2xl"></i>
+                    <span>موثق من StartupReally</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-lock text-emerald-400 text-lg sm:text-2xl"></i>
+                    <span>بياناتك محمية 100%</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-money-bill-wave text-emerald-400 text-lg sm:text-2xl"></i>
+                    <span>رد الفلوس خلال 7 أيام</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== Stats ===== -->
+    <div class="bg-white py-8 sm:py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
+            <div>
+                <div class="text-4xl sm:text-5xl font-black text-emerald-600" id="stat1">247</div>
+                <div class="text-gray-600 mt-2 font-medium text-sm sm:text-base">مشروع ممول</div>
+            </div>
+            <div>
+                <div class="text-4xl sm:text-5xl font-black text-emerald-600" id="stat2">1850</div>
+                <div class="text-gray-600 mt-2 font-medium text-sm sm:text-base">مستثمر نشيط</div>
+            </div>
+            <div>
+                <div class="text-4xl sm:text-5xl font-black text-emerald-600" id="stat3">18.7</div>
+                <div class="text-gray-600 mt-2 font-medium text-sm sm:text-base">مليون جنيه تم تمويلها</div>
+            </div>
+            <div>
+                <div class="text-4xl sm:text-5xl font-black text-emerald-600" id="stat4">98</div>
+                <div class="text-gray-600 mt-2 font-medium text-sm sm:text-base">% رضا الشباب</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== المشاريع ===== -->
+    <section id="projects" class="py-12 sm:py-16 md:py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8 sm:mb-12">
+                <div>
+                    <span class="text-emerald-600 font-bold text-sm tracking-widest">اكتشف الفرص</span>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-black">المشاريع اللي مستنية تمويلك</h2>
+                </div>
+                <a href="#" class="text-emerald-600 font-medium flex items-center gap-2 hover:gap-4 transition shrink-0">
+                    شوف الكل <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="projects-grid"></div>
+        </div>
+    </section>
+
+    <!-- ===== كيف تعمل ===== -->
+    <section id="how" class="py-12 sm:py-16 md:py-20 bg-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-black mb-10 sm:mb-16">من الفكرة للواتساب في 3 خطوات فقط</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10">
+                <div class="group">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-emerald-100 rounded-3xl flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6 group-hover:rotate-12 transition">
+                        📹
+                    </div>
+                    <h3 class="font-bold text-xl sm:text-2xl mb-2 sm:mb-3">1. قدم فكرتك</h3>
+                    <p class="text-gray-600 text-sm sm:text-base">ادفع الباقة + صوّر فيديو 5 دقائق + ارفع الدراسة</p>
+                </div>
+                <div class="group">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-emerald-100 rounded-3xl flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6 group-hover:rotate-12 transition">
+                        ✨
+                    </div>
+                    <h3 class="font-bold text-xl sm:text-2xl mb-2 sm:mb-3">2. إحنا نعمل السحر</h3>
+                    <p class="text-gray-600 text-sm sm:text-base">ننتج الفيديو + نصمم الإيميل + نسجل الفكرة باسمك</p>
+                </div>
+                <div class="group">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-emerald-100 rounded-3xl flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6 group-hover:rotate-12 transition">
+                        📲
+                    </div>
+                    <h3 class="font-bold text-xl sm:text-2xl mb-2 sm:mb-3">3. المستثمر يجيلك</h3>
+                    <p class="text-gray-600 text-sm sm:text-base">يتواصل معاك على واتساب خلال أسبوع أو نرجع فلوسك كاملة</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== الباقات ===== -->
+    <section id="packages" class="py-12 sm:py-16 md:py-20 bg-emerald-950 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-10 sm:mb-16">
+                <span class="bg-emerald-600 text-xs px-4 sm:px-6 py-2 rounded-full">اختر الباقة المناسبة لحجم مشروعك</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-black mt-4">باقاتنا الثلاثة</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-center">
+
+                <!-- الأساسية -->
+                <div class="bg-white/10 backdrop-blur-3xl rounded-3xl p-6 sm:p-8 border border-white/20 hover:border-emerald-400 transition">
+                    <div class="text-emerald-400 text-sm font-bold mb-2">الأساسية</div>
+                    <div class="text-5xl sm:text-6xl font-black mb-2">350<span class="text-xl sm:text-2xl">ج</span></div>
+                    <div class="text-gray-300 mb-6 sm:mb-8">حتى 35,000 جنيه</div>
+                    <ul class="space-y-3 sm:space-y-4 mb-8 sm:mb-10 text-sm">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> فيديو احترافي + صورة مصغرة</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> إيميل مصمم باسمك</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> تسجيل الفكرة بضمان المنصة</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> رد 100% لو مفيش مستثمر</li>
+                    </ul>
+                    <button onclick="alert('تم اختيار الباقة الأساسية! سيتم توجيهك للدفع في النسخة الكاملة')"
+                        class="w-full bg-white text-emerald-950 py-4 sm:py-5 rounded-2xl font-bold text-lg sm:text-xl hover:bg-emerald-100 transition">
+                        اختار الباقة
+                    </button>
+                </div>
+
+                <!-- Pro -->
+                <div class="bg-white/10 backdrop-blur-3xl rounded-3xl p-6 sm:p-8 border border-emerald-400 relative md:scale-105 shadow-2xl">
+                    <div class="absolute -top-4 right-6 sm:right-8 bg-emerald-600 text-white text-xs px-4 sm:px-6 py-1 rounded-3xl font-bold">
+                        الأكثر اختياراً
+                    </div>
+                    <div class="text-emerald-400 text-sm font-bold mb-2">Pro</div>
+                    <div class="text-5xl sm:text-6xl font-black mb-2">700<span class="text-xl sm:text-2xl">ج</span></div>
+                    <div class="text-gray-300 mb-6 sm:mb-8">حتى 500,000 جنيه</div>
+                    <ul class="space-y-3 sm:space-y-4 mb-8 sm:mb-10 text-sm">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> كل خدمات الأساسية</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> أولوية في عرض المشروع</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> تحليل سريع للدراسة</li>
+                    </ul>
+                    <button onclick="alert('تم اختيار باقة Pro!')"
+                        class="w-full bg-emerald-600 py-4 sm:py-5 rounded-2xl font-bold text-lg sm:text-xl hover:bg-emerald-500 transition">
+                        اختار الباقة
+                    </button>
+                </div>
+
+                <!-- Premium -->
+                <div class="bg-white/10 backdrop-blur-3xl rounded-3xl p-6 sm:p-8 border border-white/20 hover:border-emerald-400 transition">
+                    <div class="text-emerald-400 text-sm font-bold mb-2">Premium</div>
+                    <div class="text-5xl sm:text-6xl font-black mb-2">1,200<span class="text-xl sm:text-2xl">ج</span></div>
+                    <div class="text-gray-300 mb-6 sm:mb-8">حتى 2 مليون جنيه</div>
+                    <ul class="space-y-3 sm:space-y-4 mb-8 sm:mb-10 text-sm">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> كل خدمات Pro</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> دعم مباشر من الفريق</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> عرض لمستثمرين VIP</li>
+                    </ul>
+                    <button onclick="alert('تم اختيار الباقة Premium!')"
+                        class="w-full bg-white text-emerald-950 py-4 sm:py-5 rounded-2xl font-bold text-lg sm:text-xl hover:bg-emerald-100 transition">
+                        اختار الباقة
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Footer ===== -->
+    <footer class="bg-gray-900 text-white py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+            <div class="flex justify-center gap-3 mb-4 sm:mb-6">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white text-2xl sm:text-3xl font-black">
+                    SR
+                </div>
+            </div>
+            <p class="text-xl sm:text-2xl font-bold mb-2">StartupReally</p>
+            <p class="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">المنصة اللي بتحول أحلام الشباب المصري للواقع</p>
+
+            <div class="flex flex-wrap justify-center gap-4 sm:gap-8 text-sm text-gray-400">
+                <a href="#" class="hover:text-white">سياسة الخصوصية</a>
+                <a href="#" class="hover:text-white">شروط الاستخدام</a>
+                <a href="#" class="hover:text-white">اتصل بنا</a>
+            </div>
+            <div class="mt-8 sm:mt-12 text-xs text-gray-500">© 2026 StartupReally - جميع الحقوق محفوظة</div>
+        </div>
+    </footer>
+
+    <!-- ===== مودال الفيديو ===== -->
+    <div id="videoModal" class="hidden fixed inset-0 bg-black/90 items-center justify-center z-[9999] p-4">
+        <div class="w-full max-w-3xl">
+            <div class="flex justify-between items-center mb-3">
+                <h3 id="videoTitle" class="text-white font-bold text-lg truncate pl-4"></h3>
+                <button onclick="closeVideo()" class="text-white text-4xl leading-none hover:text-red-400 transition shrink-0">×</button>
+            </div>
+            <video id="projectVideo" class="w-full rounded-2xl shadow-2xl max-h-[75vh]" controls></video>
+        </div>
+    </div>
+
+    <!-- ===== مودال التفاصيل ===== -->
+    <div id="detailsModal" class="hidden fixed inset-0 bg-black/70 items-center justify-center z-[9999] p-4">
+        <div class="bg-white max-w-2xl w-full rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col">
+            <div class="bg-emerald-600 text-white px-6 py-5 flex justify-between items-center shrink-0">
+                <h3 class="text-xl font-black flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info"></i> تفاصيل المشروع
+                </h3>
+                <button onclick="closeDetails()" class="text-3xl leading-none hover:text-emerald-200 transition">×</button>
+            </div>
+            <div id="detailsBody" class="p-6 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- ملف الـ JS الخاص بينا -->
+    <script src="app.js"></script>
+
+</body>
+</html>
