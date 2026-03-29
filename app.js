@@ -290,7 +290,7 @@ function contactWhatsApp(phone) {
     let number = phone.replace(/\D/g, '');
     if (number.startsWith('0')) number = '2' + number;
     window.open(
-        `https://wa.me/${number}?text=${encodeURIComponent('مرحبا، شفت مشروعك على StartupRelly وعجبني! هنقدر نتكلم؟')}`,
+        `https://wa.me/${number}?text=${encodeURIComponent('مرحبا، شفت مشروعك على StartupReally وعجبني! هنقدر نتكلم؟')}`,
         '_blank'
     );
 }
@@ -338,5 +338,5 @@ window.onload = function () {
         if (e.target === this) closeDetails();
     });
 
-    console.log('%c✅ StartupRelly متصل بالـ Backend!', 'color:#10b981; font-size:18px; font-weight:bold');
+    console.log('%c✅ StartupReally متصل بالـ Backend!', 'color:#10b981; font-size:18px; font-weight:bold');
 };

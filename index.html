@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StartupRelly | ربط أفكار الشباب بالتمويل</title>
+    <title>StartupReally | ربط أفكار الشباب بالتمويل</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,12 +28,12 @@
                     SR
                 </div>
                 <div>
-                    <span class="text-xl sm:text-3xl font-black tracking-tighter tail-text">StartupRelly</span>
+                    <span class="text-xl sm:text-3xl font-black tracking-tighter tail-text">StartupReally</span>
                     <p class="text-[10px] text-emerald-600 -mt-1">مصر 100%</p>
                 </div>
             </div>
 
-            <!-- روابط -->
+            <!-- روابط - تتخفى على الموبايل -->
             <div class="hidden md:flex items-center gap-6 lg:gap-8 text-base lg:text-lg font-medium">
                 <a href="#" class="hover:text-emerald-600 transition">الرئيسية</a>
                 <a href="#projects" class="hover:text-emerald-600 transition">المشاريع</a>
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <!-- قائمة موبايل -->
+        <!-- قائمة موبايل تحت الناف -->
         <div class="md:hidden border-t border-gray-100 px-4 py-3 flex justify-around text-sm font-medium text-gray-700">
             <a href="#" class="hover:text-emerald-600 transition">الرئيسية</a>
             <a href="#projects" class="hover:text-emerald-600 transition">المشاريع</a>
@@ -100,7 +100,7 @@
             <div class="mt-10 sm:mt-16 flex flex-wrap justify-center gap-4 sm:gap-10 text-xs sm:text-sm">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-shield-halved text-emerald-400 text-lg sm:text-2xl"></i>
-                    <span>موثق من StartupRelly</span>
+                    <span>موثق من StartupReally</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-lock text-emerald-400 text-lg sm:text-2xl"></i>
@@ -108,7 +108,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-money-bill-wave text-emerald-400 text-lg sm:text-2xl"></i>
-                    <span>رد الفلوس خلال 7 أيام</span>
+                    <span>رد الفلوس خلال 10 أيام</span>
                 </div>
             </div>
         </div>
@@ -160,17 +160,23 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10">
                 <div class="group">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-emerald-100 rounded-3xl flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6 group-hover:rotate-12 transition">📹</div>
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-emerald-100 rounded-3xl flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6 group-hover:rotate-12 transition">
+                        📹
+                    </div>
                     <h3 class="font-bold text-xl sm:text-2xl mb-2 sm:mb-3">1. قدم فكرتك</h3>
                     <p class="text-gray-600 text-sm sm:text-base">ادفع الباقة + صوّر فيديو 5 دقائق + ارفع الدراسة</p>
                 </div>
                 <div class="group">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-emerald-100 rounded-3xl flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6 group-hover:rotate-12 transition">✨</div>
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-emerald-100 rounded-3xl flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6 group-hover:rotate-12 transition">
+                        ✨
+                    </div>
                     <h3 class="font-bold text-xl sm:text-2xl mb-2 sm:mb-3">2. إحنا نعمل السحر</h3>
                     <p class="text-gray-600 text-sm sm:text-base">ننتج الفيديو + نصمم الإيميل + نسجل الفكرة باسمك</p>
                 </div>
                 <div class="group">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-emerald-100 rounded-3xl flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6 group-hover:rotate-12 transition">📲</div>
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-emerald-100 rounded-3xl flex items-center justify-center text-3xl sm:text-4xl mb-4 sm:mb-6 group-hover:rotate-12 transition">
+                        📲
+                    </div>
                     <h3 class="font-bold text-xl sm:text-2xl mb-2 sm:mb-3">3. المستثمر يجيلك</h3>
                     <p class="text-gray-600 text-sm sm:text-base">يتواصل معاك على واتساب خلال أسبوع أو نرجع فلوسك كاملة</p>
                 </div>
@@ -199,8 +205,9 @@
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> تسجيل الفكرة بضمان المنصة</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> رد 100% لو مفيش مستثمر</li>
                     </ul>
-                    <button onclick="showFormModal()"
-                        class="w-full bg-white text-emerald-950 py-4 sm:py-5 rounded-2xl font-bold text-lg sm:text-xl hover:bg-emerald-100 transition">
+                    <button onclick="selectPackage('الأساسية', '350')"
+                        class="w-full bg-white text-emerald-950 py-4 sm:py-5 rounded-2xl font-bold text-lg sm:text-xl hover:bg-emerald-100 transition flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-green-600 text-2xl"></i>
                         اختار الباقة
                     </button>
                 </div>
@@ -218,8 +225,9 @@
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> أولوية في عرض المشروع</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> تحليل سريع للدراسة</li>
                     </ul>
-                    <button onclick="showFormModal()"
-                        class="w-full bg-emerald-600 py-4 sm:py-5 rounded-2xl font-bold text-lg sm:text-xl hover:bg-emerald-500 transition">
+                    <button onclick="selectPackage('Pro', '700')"
+                        class="w-full bg-emerald-600 py-4 sm:py-5 rounded-2xl font-bold text-lg sm:text-xl hover:bg-emerald-500 transition flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-white text-2xl"></i>
                         اختار الباقة
                     </button>
                 </div>
@@ -234,8 +242,9 @@
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> دعم مباشر من الفريق</li>
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check"></i> عرض لمستثمرين VIP</li>
                     </ul>
-                    <button onclick="showFormModal()"
-                        class="w-full bg-white text-emerald-950 py-4 sm:py-5 rounded-2xl font-bold text-lg sm:text-xl hover:bg-emerald-100 transition">
+                    <button onclick="selectPackage('Premium', '1200')"
+                        class="w-full bg-white text-emerald-950 py-4 sm:py-5 rounded-2xl font-bold text-lg sm:text-xl hover:bg-emerald-100 transition flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-green-600 text-2xl"></i>
                         اختار الباقة
                     </button>
                 </div>
@@ -252,7 +261,7 @@
                     SR
                 </div>
             </div>
-            <p class="text-xl sm:text-2xl font-bold mb-2">StartupRelly</p>
+            <p class="text-xl sm:text-2xl font-bold mb-2">StartupReally</p>
             <p class="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">المنصة اللي بتحول أحلام الشباب المصري للواقع</p>
 
             <div class="flex flex-wrap justify-center gap-4 sm:gap-8 text-sm text-gray-400">
@@ -260,7 +269,7 @@
                 <a href="#" class="hover:text-white">شروط الاستخدام</a>
                 <a href="#" class="hover:text-white">اتصل بنا</a>
             </div>
-            <div class="mt-8 sm:mt-12 text-xs text-gray-500">© 2026 StartupRelly - جميع الحقوق محفوظة</div>
+            <div class="mt-8 sm:mt-12 text-xs text-gray-500">© 2026 StartupReally - جميع الحقوق محفوظة</div>
         </div>
     </footer>
 
@@ -290,6 +299,18 @@
 
     <!-- ملف الـ JS الخاص بينا -->
     <script src="app.js"></script>
+
+    <!-- ===== دالة اختيار الباقة وفتح واتساب ===== -->
+    <script>
+        function selectPackage(packageName, price) {
+            const number = '201098599892';
+            const message = `مرحبا، أنا مهتم بالاشتراك في StartupReally 🚀\n\nاخترت: الباقة ${packageName} بسعر ${price} جنيه\n\nممكن تساعدني أكمل الخطوات؟`;
+            window.open(
+                `https://wa.me/${number}?text=${encodeURIComponent(message)}`,
+                '_blank'
+            );
+        }
+    </script>
 
 </body>
 </html>
