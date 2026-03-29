@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /private/
+Disallow: /admin/
+
+# رابط خريطة الموقع
+Sitemap: https://startupreally.com/sitemap.xml
