@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - StartupRelly</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .modal {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-950 text-white">
+
+    <!-- Sidebar -->
+    <div class="fixed top-0 right-0 h-full w-72 bg-gray-900 border-l border-gray-800 p-6">
+        <div class="flex items-center gap-3 mb-10">
+            <div class="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-3xl font-black">SR
+            </div>
+            <div class="text-3xl font-bold neon">StartupRelly</div>
+        </div>
+        <nav class="space-y-2">
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-2xl bg-emerald-600 text-white">
+                <i class="fa-solid fa-gauge"></i>
+                <span class="font-medium">لوحة التحكم</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gray-800 transition">
+                <i class="fa-solid fa-lightbulb"></i>
+                <span class="font-medium">المشاريع</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gray-800 transition">
+                <i class="fa-solid fa-users"></i>
+                <span class="font-medium">أصحاب المشاريع</span>
+            </a>
+        </nav>
+    </div>
+
+    <div class="mr-72 p-8">
+
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-4xl font-bold">لوحة التحكم</h1>
+            <div class="flex items-center gap-4">
+                <input type="text" id="searchInput" placeholder="بحث عن اسم أو مشروع..."
+                    class="bg-gray-800 border border-gray-700 rounded-2xl px-5 py-3 w-80 focus:outline-none focus:border-emerald-500">
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-4 gap-6 mb-10">
+            <div class="bg-gray-900 rounded-3xl p-6">
+                <p class="text-gray-400 text-sm">إجمالي التقديمات</p>
+                <p class="text-5xl font-bold text-emerald-400 mt-2" id="totalSubmissions">142</p>
+            </div>
+            <div class="bg-gray-900 rounded-3xl p-6">
+                <p class="text-gray-400 text-sm">قيد المراجعة</p>
+                <p class="text-5xl font-bold text-yellow-400 mt-2" id="pendingCount">28</p>
+            </div>
+            <div class="bg-gray-900 rounded-3xl p-6">
+                <p class="text-gray-400 text-sm">تمت الموافقة</p>
+                <p class="text-5xl font-bold text-emerald-400 mt-2" id="approvedCount">87</p>
+            </div>
+            <div class="bg-gray-900 rounded-3xl p-6">
+                <p class="text-gray-400 text-sm">إجمالي الإيرادات</p>
+                <p class="text-5xl font-bold text-emerald-400 mt-2" id="totalRevenue">248,500 ج</p>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="bg-gray-900 rounded-3xl overflow-hidden">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-gray-800 text-gray-400 text-sm">
+                        <th class="py-5 px-6 text-right">الاسم</th>
+                        <th class="py-5 px-6 text-right">اسم المشروع</th>
+                        <th class="py-5 px-6 text-right">الباقة</th>
+                        <th class="py-5 px-6 text-right">الحالة</th>
+                        <th class="py-5 px-6 text-right">تاريخ التقديم</th>
+                        <th class="py-5 px-6 text-center">تفعيل</th>
+                        <th class="py-5 px-6 text-center">عرض</th>
+                    </tr>
+                </thead>
+                <tbody id="projectsTable" class="text-gray-300"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal لعرض التفاصيل -->
+    <div id="detailsModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+        <div class="bg-gray-900 w-full max-w-3xl mx-4 rounded-3xl p-8 modal">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold" id="modalProjectName"></h2>
+                <button onclick="closeModal()" class="text-4xl leading-none text-gray-400 hover:text-white">×</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-8" id="modalContent">
+                <!-- يتم ملؤه بالـ JS -->
+            </div>
+
+            <div class="mt-8 flex justify-end">
+                <button onclick="closeModal()"
+                    class="px-8 py-4 bg-gray-800 hover:bg-gray-700 rounded-2xl font-medium">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات تجريبية
+        let submissions = [
+            { id: 1, name: "أحمد محمد", project: "تطبيق توصيل خضار", package: "pro", status: "approved", date: "2026-03-27", amount: 450000, percentage: 22, phone: "01012345678", email: "ahmed@example.com" },
+            { id: 2, name: "مريم خالد", project: "منصة تعليم لهجة مصرية", package: "premium", status: "pending", date: "2026-03-28", amount: 520000, percentage: 23, phone: "01123456789", email: "mariam@example.com" },
+            { id: 3, name: "ياسر علي", project: "مصنع حلويات طبيعية", package: "basic", status: "approved", date: "2026-03-26", amount: 35000, percentage: 18, phone: "01234567890", email: "yasser@example.com" },
+        ];
+
+        function renderTable() {
+            const tbody = document.getElementById('projectsTable');
+            tbody.innerHTML = submissions.map(sub => `
+        <tr class="border-b border-gray-800 hover:bg-gray-800 cursor-pointer" onclick="showDetails(${sub.id})">
+            <td class="px-6 py-5">${sub.name}</td>
+            <td class="px-6 py-5">${sub.project}</td>
+            <td class="px-6 py-5">${sub.package}</td>
+            <td class="px-6 py-5">
+                <span class="px-4 py-1 rounded-full text-sm ${sub.status === 'approved' ? 'bg-emerald-500 text-white' : 'bg-yellow-500 text-white'}">
+                    ${sub.status === 'approved' ? 'موافق' : 'قيد المراجعة'}
+                </span>
+            </td>
+            <td class="px-6 py-5">${sub.date}</td>
+            <td class="px-6 py-5 text-center">
+                <button onclick="event.stopImmediatePropagation(); toggleActivation(${sub.id});" 
+                        class="px-5 py-2 rounded-2xl ${sub.status === 'approved' ? 'bg-red-500 hover:bg-red-600' : 'bg-emerald-500 hover:bg-emerald-600'} text-white text-sm font-medium">
+                    ${sub.status === 'approved' ? 'إلغاء التفعيل' : 'تفعيل'}
+                </button>
+            </td>
+            <td class="px-6 py-5 text-center">
+                <i class="fa-solid fa-eye text-emerald-400 hover:text-emerald-500 text-xl"></i>
+            </td>
+        </tr>
+    `).join('');
+        }
+
+        function showDetails(id) {
+            const sub = submissions.find(s => s.id === id);
+            if (!sub) return;
+
+            document.getElementById('modalProjectName').textContent = sub.project;
+
+            const content = document.getElementById('modalContent');
+            content.innerHTML = `
+        <div>
+            <p class="text-gray-400 text-sm">الاسم</p>
+            <p class="text-lg">${sub.name}</p>
+            
+            <p class="text-gray-400 text-sm mt-6">رقم التليفون</p>
+            <p class="text-lg">${sub.phone}</p>
+            
+            <p class="text-gray-400 text-sm mt-6">الإيميل</p>
+            <p class="text-lg">${sub.email}</p>
+            
+            <p class="text-gray-400 text-sm mt-6">المبلغ المطلوب</p>
+            <p class="text-2xl font-bold text-emerald-400">${sub.amount.toLocaleString()} جنيه</p>
+        </div>
+        
+        <div>
+            <p class="text-gray-400 text-sm">النسبة</p>
+            <p class="text-2xl font-bold">${sub.percentage}%</p>
+            
+            <p class="text-gray-400 text-sm mt-6">نوع الباقة</p>
+            <p class="text-lg">${sub.package}</p>
+            
+            <p class="text-gray-400 text-sm mt-6">تاريخ التقديم</p>
+            <p class="text-lg">${sub.date}</p>
+            
+            <p class="text-gray-400 text-sm mt-6">الحالة</p>
+            <span class="px-5 py-2 rounded-full ${sub.status === 'approved' ? 'bg-emerald-500' : 'bg-yellow-500'} text-white inline-block">
+                ${sub.status === 'approved' ? 'موافق عليه' : 'قيد المراجعة'}
+            </span>
+        </div>
+    `;
+
+            document.getElementById('detailsModal').classList.remove('hidden');
+            document.getElementById('detailsModal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('detailsModal').classList.add('hidden');
+            document.getElementById('detailsModal').classList.remove('flex');
+        }
+
+        function toggleActivation(id) {
+            const sub = submissions.find(s => s.id === id);
+            if (!sub) return;
+
+            if (sub.status === 'approved') {
+                sub.status = 'pending';
+                alert(`تم إلغاء تفعيل مشروع ${sub.project}`);
+            } else {
+                sub.status = 'approved';
+                alert(`تم تفعيل مشروع ${sub.project}`);
+            }
+            renderTable();
+        }
+
+        // تشغيل الصفحة
+        renderTable();
+    </script>
+</body>
+
+</html>
