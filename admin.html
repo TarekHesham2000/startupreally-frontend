@@ -1,230 +1,1481 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - StartupRelly</title>
+    <title>StartupRelly — لوحة الإدارة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        * { font-family: 'Cairo', sans-serif; }
 
-        body {
+        :root {
+            --bg: #0a0f1a;
+            --surface: #111827;
+            --surface2: #1a2332;
+            --border: #1e2d3d;
+            --emerald: #10b981;
+            --emerald-dim: #064e3b;
+            --text: #e2e8f0;
+            --muted: #64748b;
+        }
+
+        body { background: var(--bg); color: var(--text); }
+
+        /* Sidebar */
+        .sidebar { background: var(--surface); border-left: 1px solid var(--border); }
+
+        /* Cards */
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            transition: border-color .3s, transform .3s;
+        }
+        .stat-card:hover { border-color: var(--emerald); transform: translateY(-3px); }
+
+        /* Table */
+        .data-table thead th { background: var(--surface2); color: var(--muted); }
+        .data-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background .2s;
+        }
+        .data-table tbody tr:hover { background: var(--surface2); }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--emerald); }
+
+        /* Badge */
+        .badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: 700; letter-spacing: .4px;
+        }
+        .badge-published    { background: #064e3b; color: #34d399; }
+        .badge-pending      { background: #451a03; color: #fb923c; }
+        .badge-under-review { background: #1e3a5f; color: #60a5fa; }
+        .badge-approved     { background: #14532d; color: #4ade80; }
+        .badge-rejected     { background: #4c0519; color: #f87171; }
+
+        .badge-basic   { background: #1f2937; color: #9ca3af; }
+        .badge-pro     { background: #1e3a5f; color: #60a5fa; }
+        .badge-premium { background: #3b1f5f; color: #c084fc; }
+
+        /* Modal */
+        .modal-overlay {
+            background: rgba(0,0,0,.85);
+            backdrop-filter: blur(8px);
+        }
+        .modal-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+        .detail-section { background: var(--surface2); border: 1px solid var(--border); }
+        .detail-row { border-bottom: 1px solid var(--border); }
+        .detail-row:last-child { border-bottom: none; }
+
+        /* Search */
+        .search-input {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .search-input:focus { border-color: var(--emerald); outline: none; }
+        .search-input::placeholder { color: var(--muted); }
+
+        /* Select */
+        .filter-select {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .filter-select:focus { border-color: var(--emerald); outline: none; }
+
+        /* Action Btn */
+        .action-btn {
+            padding: 6px 12px; border-radius: 8px;
+            font-size: 12px; font-weight: 700;
+            transition: all .2s; cursor: pointer; border: none;
+        }
+        .btn-view        { background: #1e3a5f; color: #60a5fa; }
+        .btn-view:hover  { background: #2563eb; color: #fff; }
+        .btn-wa          { background: #14532d; color: #4ade80; }
+        .btn-wa:hover    { background: #16a34a; color: #fff; }
+        .btn-approve     { background: #064e3b; color: #34d399; }
+        .btn-approve:hover{ background: #059669; color: #fff; }
+        .btn-approved    { background: #1f2937; color: #6b7280; cursor: not-allowed; }
+        .btn-edit        { background: #2d1f5f; color: #a78bfa; }
+        .btn-edit:hover  { background: #7c3aed; color: #fff; }
+
+        /* Toast */
+        #toast {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; padding: 14px 24px;
+            display: flex; align-items: center; gap-12px; gap: 12px;
+            font-weight: 700; font-size: 14px; z-index: 999999;
+            transition: transform .4s cubic-bezier(.175,.885,.32,1.275);
+            min-width: 260px; box-shadow: 0 20px 40px rgba(0,0,0,.5);
+            white-space: nowrap;
+        }
+        #toast.show { transform: translateX(-50%) translateY(0); }
+        #toast.success { border-color: #059669; }
+        #toast.error   { border-color: #dc2626; }
+
+        /* Confirm Modal */
+        .confirm-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            max-width: 440px; width: 100%;
+            padding: 32px;
+        }
+
+        /* Edit Modal */
+        .edit-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            max-width: 540px; width: 100%;
+            max-height: 92vh;
+            display: flex; flex-direction: column;
+        }
+        .edit-input {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 14px;
             font-family: 'Cairo', sans-serif;
+            width: 100%;
+            transition: border-color .2s;
+        }
+        .edit-input:focus { border-color: var(--emerald); outline: none; }
+        .edit-input option { background: var(--surface2); }
+
+        /* Video Upload Zone */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color .2s, background .2s;
+            position: relative;
+        }
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--emerald);
+            background: rgba(16,185,129,.05);
+        }
+        .upload-zone input[type=file] {
+            position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+        }
+        /* Progress bar */
+        .progress-bar {
+            height: 4px; border-radius: 4px; background: var(--border);
+            overflow: hidden; margin-top: 8px;
+        }
+        .progress-fill {
+            height: 100%; background: var(--emerald);
+            border-radius: 4px; width: 0%;
+            transition: width .3s;
         }
 
-        .modal {
-            animation: fadeIn 0.3s ease;
-        }
+        /* Pulse dot */
+        .dot-online { width: 8px; height: 8px; border-radius: 50%; background: var(--emerald); box-shadow: 0 0 0 3px rgba(16,185,129,.25); animation: pulse-dot 2s infinite; }
+        @keyframes pulse-dot { 0%,100% { box-shadow: 0 0 0 3px rgba(16,185,129,.25); } 50% { box-shadow: 0 0 0 6px rgba(16,185,129,.05); } }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
+        /* Video thumbnail */
+        .thumb-wrap { position: relative; width: 70px; height: 45px; border-radius: 6px; overflow: hidden; cursor: pointer; }
+        .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .thumb-play { position: absolute; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .2s; }
+        .thumb-wrap:hover .thumb-play { opacity: 1; }
 
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+        /* Loading skeleton */
+        .skeleton { background: linear-gradient(90deg, var(--surface2) 25%, var(--border) 50%, var(--surface2) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* Tabs */
+        .tab-btn { transition: all .2s; border-bottom: 2px solid transparent; }
+        .tab-btn.active { border-bottom-color: var(--emerald); color: var(--emerald); }
+
+        /* Avatar initials */
+        .avatar { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
     </style>
 </head>
 
-<body class="bg-gray-950 text-white">
+<body class="min-h-screen">
 
-    <!-- Sidebar -->
-    <div class="fixed top-0 right-0 h-full w-72 bg-gray-900 border-l border-gray-800 p-6">
-        <div class="flex items-center gap-3 mb-10">
-            <div class="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-3xl font-black">SR
-            </div>
-            <div class="text-3xl font-bold neon">StartupRelly</div>
-        </div>
-        <nav class="space-y-2">
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-2xl bg-emerald-600 text-white">
-                <i class="fa-solid fa-gauge"></i>
-                <span class="font-medium">لوحة التحكم</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gray-800 transition">
-                <i class="fa-solid fa-lightbulb"></i>
-                <span class="font-medium">المشاريع</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-gray-800 transition">
-                <i class="fa-solid fa-users"></i>
-                <span class="font-medium">أصحاب المشاريع</span>
-            </a>
-        </nav>
-    </div>
+<!-- =============================== SIDEBAR =============================== -->
+<div class="flex min-h-screen">
 
-    <div class="mr-72 p-8">
+<aside class="sidebar w-64 flex-shrink-0 flex flex-col sticky top-0 h-screen hidden lg:flex">
 
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-4xl font-bold">لوحة التحكم</h1>
-            <div class="flex items-center gap-4">
-                <input type="text" id="searchInput" placeholder="بحث عن اسم أو مشروع..."
-                    class="bg-gray-800 border border-gray-700 rounded-2xl px-5 py-3 w-80 focus:outline-none focus:border-emerald-500">
-            </div>
-        </div>
-
-        <!-- Stats -->
-        <div class="grid grid-cols-4 gap-6 mb-10">
-            <div class="bg-gray-900 rounded-3xl p-6">
-                <p class="text-gray-400 text-sm">إجمالي التقديمات</p>
-                <p class="text-5xl font-bold text-emerald-400 mt-2" id="totalSubmissions">142</p>
-            </div>
-            <div class="bg-gray-900 rounded-3xl p-6">
-                <p class="text-gray-400 text-sm">قيد المراجعة</p>
-                <p class="text-5xl font-bold text-yellow-400 mt-2" id="pendingCount">28</p>
-            </div>
-            <div class="bg-gray-900 rounded-3xl p-6">
-                <p class="text-gray-400 text-sm">تمت الموافقة</p>
-                <p class="text-5xl font-bold text-emerald-400 mt-2" id="approvedCount">87</p>
-            </div>
-            <div class="bg-gray-900 rounded-3xl p-6">
-                <p class="text-gray-400 text-sm">إجمالي الإيرادات</p>
-                <p class="text-5xl font-bold text-emerald-400 mt-2" id="totalRevenue">248,500 ج</p>
-            </div>
-        </div>
-
-        <!-- Table -->
-        <div class="bg-gray-900 rounded-3xl overflow-hidden">
-            <table class="w-full">
-                <thead>
-                    <tr class="border-b border-gray-800 text-gray-400 text-sm">
-                        <th class="py-5 px-6 text-right">الاسم</th>
-                        <th class="py-5 px-6 text-right">اسم المشروع</th>
-                        <th class="py-5 px-6 text-right">الباقة</th>
-                        <th class="py-5 px-6 text-right">الحالة</th>
-                        <th class="py-5 px-6 text-right">تاريخ التقديم</th>
-                        <th class="py-5 px-6 text-center">تفعيل</th>
-                        <th class="py-5 px-6 text-center">عرض</th>
-                    </tr>
-                </thead>
-                <tbody id="projectsTable" class="text-gray-300"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Modal لعرض التفاصيل -->
-    <div id="detailsModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-        <div class="bg-gray-900 w-full max-w-3xl mx-4 rounded-3xl p-8 modal">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold" id="modalProjectName"></h2>
-                <button onclick="closeModal()" class="text-4xl leading-none text-gray-400 hover:text-white">×</button>
-            </div>
-
-            <div class="grid grid-cols-2 gap-8" id="modalContent">
-                <!-- يتم ملؤه بالـ JS -->
-            </div>
-
-            <div class="mt-8 flex justify-end">
-                <button onclick="closeModal()"
-                    class="px-8 py-4 bg-gray-800 hover:bg-gray-700 rounded-2xl font-medium">إغلاق</button>
+    <!-- Logo -->
+    <div class="px-6 py-5 border-b border-[var(--border)]">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center font-black text-white text-lg">SR</div>
+            <div>
+                <p class="font-black text-lg leading-none text-emerald-400">StartupRelly</p>
+                <p class="text-[10px] text-[var(--muted)]">Admin Panel</p>
             </div>
         </div>
     </div>
 
-    <script>
-        // بيانات تجريبية
-        let submissions = [
-            { id: 1, name: "أحمد محمد", project: "تطبيق توصيل خضار", package: "pro", status: "approved", date: "2026-03-27", amount: 450000, percentage: 22, phone: "01012345678", email: "ahmed@example.com" },
-            { id: 2, name: "مريم خالد", project: "منصة تعليم لهجة مصرية", package: "premium", status: "pending", date: "2026-03-28", amount: 520000, percentage: 23, phone: "01123456789", email: "mariam@example.com" },
-            { id: 3, name: "ياسر علي", project: "مصنع حلويات طبيعية", package: "basic", status: "approved", date: "2026-03-26", amount: 35000, percentage: 18, phone: "01234567890", email: "yasser@example.com" },
-        ];
+    <!-- Live Indicator -->
+    <div class="px-6 py-3 border-b border-[var(--border)]">
+        <div class="flex items-center gap-2 text-xs text-[var(--muted)]">
+            <div class="dot-online"></div>
+            <span>متصل بالـ Backend</span>
+        </div>
+    </div>
 
-        function renderTable() {
-            const tbody = document.getElementById('projectsTable');
-            tbody.innerHTML = submissions.map(sub => `
-        <tr class="border-b border-gray-800 hover:bg-gray-800 cursor-pointer" onclick="showDetails(${sub.id})">
-            <td class="px-6 py-5">${sub.name}</td>
-            <td class="px-6 py-5">${sub.project}</td>
-            <td class="px-6 py-5">${sub.package}</td>
-            <td class="px-6 py-5">
-                <span class="px-4 py-1 rounded-full text-sm ${sub.status === 'approved' ? 'bg-emerald-500 text-white' : 'bg-yellow-500 text-white'}">
-                    ${sub.status === 'approved' ? 'موافق' : 'قيد المراجعة'}
-                </span>
-            </td>
-            <td class="px-6 py-5">${sub.date}</td>
-            <td class="px-6 py-5 text-center">
-                <button onclick="event.stopImmediatePropagation(); toggleActivation(${sub.id});" 
-                        class="px-5 py-2 rounded-2xl ${sub.status === 'approved' ? 'bg-red-500 hover:bg-red-600' : 'bg-emerald-500 hover:bg-emerald-600'} text-white text-sm font-medium">
-                    ${sub.status === 'approved' ? 'إلغاء التفعيل' : 'تفعيل'}
+    <!-- Nav -->
+    <nav class="flex-1 px-4 py-6 space-y-1">
+        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-emerald-500/10 text-emerald-400 font-bold text-sm">
+            <i class="fa-solid fa-table-list w-4 text-center"></i> طلبات المشاريع
+        </a>
+        <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface2)] font-medium text-sm transition">
+            <i class="fa-solid fa-house w-4 text-center"></i> الصفحة الرئيسية
+        </a>
+    </nav>
+
+    <!-- Refresh -->
+    <div class="px-4 py-4 border-t border-[var(--border)]">
+        <button onclick="fetchSubmissions()" class="w-full flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-sm transition">
+            <i class="fa-solid fa-rotate-right" id="refreshIcon"></i>
+            تحديث البيانات
+        </button>
+    </div>
+</aside>
+
+<!-- =============================== MAIN =============================== -->
+<main class="flex-1 overflow-x-hidden">
+
+    <!-- Top Bar -->
+    <header class="sticky top-0 z-40 bg-[var(--bg)]/80 backdrop-blur-lg border-b border-[var(--border)] px-4 sm:px-8 py-4 flex items-center justify-between">
+        <div>
+            <h1 class="text-xl font-black">لوحة إدارة المشاريع</h1>
+            <p class="text-[var(--muted)] text-xs mt-0.5" id="lastUpdate">—</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="dot-online hidden sm:block"></div>
+            <span class="text-xs text-[var(--muted)] hidden sm:inline">Live API</span>
+            <button onclick="fetchSubmissions()" class="lg:hidden flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-sm transition">
+                <i class="fa-solid fa-rotate-right"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="px-4 sm:px-8 py-6 space-y-6">
+
+        <!-- ===== STATS ===== -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="statsRow">
+            <div class="stat-card rounded-2xl p-5">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-[var(--muted)] text-xs font-medium">إجمالي الطلبات</span>
+                    <i class="fa-solid fa-folder text-emerald-500 text-lg"></i>
+                </div>
+                <div class="text-4xl font-black text-emerald-400" id="statTotal">—</div>
+                <div class="text-[var(--muted)] text-xs mt-1">submission</div>
+            </div>
+            <div class="stat-card rounded-2xl p-5">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-[var(--muted)] text-xs font-medium">إجمالي التمويل</span>
+                    <i class="fa-solid fa-money-bill text-emerald-500 text-lg"></i>
+                </div>
+                <div class="text-4xl font-black text-emerald-400" id="statAmount">—</div>
+                <div class="text-[var(--muted)] text-xs mt-1">جنيه مطلوب</div>
+            </div>
+            <div class="stat-card rounded-2xl p-5">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-[var(--muted)] text-xs font-medium">إيرادات الباقات</span>
+                    <i class="fa-solid fa-coins text-yellow-400 text-lg"></i>
+                </div>
+                <div class="text-4xl font-black text-yellow-400" id="statRevenue">—</div>
+                <div class="text-[var(--muted)] text-xs mt-1">جنيه</div>
+            </div>
+            <div class="stat-card rounded-2xl p-5">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-[var(--muted)] text-xs font-medium">بهم فيديو</span>
+                    <i class="fa-solid fa-video text-blue-400 text-lg"></i>
+                </div>
+                <div class="text-4xl font-black text-blue-400" id="statVideos">—</div>
+                <div class="text-[var(--muted)] text-xs mt-1">مشروع</div>
+            </div>
+        </div>
+
+        <!-- ===== FILTERS ===== -->
+        <div class="flex flex-col sm:flex-row gap-3">
+            <div class="relative flex-1">
+                <i class="fa-solid fa-search absolute top-1/2 -translate-y-1/2 right-4 text-[var(--muted)] text-sm"></i>
+                <input type="text" id="searchInput" placeholder="ابحث باسم المشروع أو المقدم أو الإيميل..."
+                    class="search-input w-full rounded-xl px-5 py-3 pr-10 text-sm" oninput="applyFilters()">
+            </div>
+            <select id="filterStatus" class="filter-select rounded-xl px-4 py-3 text-sm" onchange="applyFilters()">
+                <option value="">كل الحالات</option>
+                <option value="pending">⏳ قيد المراجعة</option>
+                <option value="under_review">🔍 جاري المراجعة</option>
+                <option value="approved">✅ مقبول</option>
+                <option value="rejected">❌ مرفوض</option>
+                <option value="published">🌐 منشور</option>
+            </select>
+            <select id="filterPackage" class="filter-select rounded-xl px-4 py-3 text-sm" onchange="applyFilters()">
+                <option value="">كل الباقات</option>
+                <option value="basic">أساسية</option>
+                <option value="pro">Pro</option>
+                <option value="premium">Premium</option>
+            </select>
+            <select id="filterVideo" class="filter-select rounded-xl px-4 py-3 text-sm" onchange="applyFilters()">
+                <option value="">الكل</option>
+                <option value="yes">بهم فيديو</option>
+                <option value="no">بدون فيديو</option>
+            </select>
+        </div>
+
+        <!-- Results count -->
+        <div class="flex items-center justify-between">
+            <p class="text-[var(--muted)] text-sm" id="resultsCount">جاري التحميل...</p>
+            <div class="flex gap-2">
+                <button onclick="setView('table')" id="btnTable" class="tab-btn active text-sm px-3 py-1 text-[var(--muted)]" onclick="">
+                    <i class="fa-solid fa-table-list"></i> جدول
                 </button>
-            </td>
-            <td class="px-6 py-5 text-center">
-                <i class="fa-solid fa-eye text-emerald-400 hover:text-emerald-500 text-xl"></i>
-            </td>
-        </tr>
-    `).join('');
+                <button onclick="setView('cards')" id="btnCards" class="tab-btn text-sm px-3 py-1 text-[var(--muted)]">
+                    <i class="fa-solid fa-grip"></i> كروت
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== TABLE VIEW ===== -->
+        <div id="tableView">
+            <div class="rounded-2xl overflow-hidden border border-[var(--border)]">
+                <div class="overflow-x-auto">
+                    <table class="data-table w-full text-sm">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-3 text-right font-bold text-xs whitespace-nowrap">#</th>
+                                <th class="px-4 py-3 text-right font-bold text-xs whitespace-nowrap">المقدم</th>
+                                <th class="px-4 py-3 text-right font-bold text-xs whitespace-nowrap">المشروع</th>
+                                <th class="px-4 py-3 text-right font-bold text-xs whitespace-nowrap">فيديو</th>
+                                <th class="px-4 py-3 text-right font-bold text-xs whitespace-nowrap">المبلغ</th>
+                                <th class="px-4 py-3 text-right font-bold text-xs whitespace-nowrap">الحصة</th>
+                                <th class="px-4 py-3 text-right font-bold text-xs whitespace-nowrap">الباقة</th>
+                                <th class="px-4 py-3 text-right font-bold text-xs whitespace-nowrap">الحالة</th>
+                                <th class="px-4 py-3 text-right font-bold text-xs whitespace-nowrap">التاريخ</th>
+                                <th class="px-4 py-3 text-right font-bold text-xs whitespace-nowrap">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr><td colspan="10" class="px-4 py-16 text-center text-[var(--muted)]">
+                                <i class="fa-solid fa-spinner fa-spin text-emerald-500 text-3xl mb-3 block"></i>
+                                جاري تحميل البيانات...
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CARDS VIEW ===== -->
+        <div id="cardsView" class="hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" id="cardsGrid"></div>
+        </div>
+
+    </div>
+</main>
+</div>
+
+<!-- =============================== DETAIL MODAL =============================== -->
+<div id="detailModal" class="modal-overlay fixed inset-0 z-[9999] hidden items-center justify-center p-4">
+<div class="modal-box rounded-3xl w-full max-w-3xl max-h-[92vh] flex flex-col overflow-hidden">
+
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between px-7 py-5 border-b border-[var(--border)] shrink-0">
+        <div class="flex items-center gap-3">
+            <div class="avatar bg-emerald-500/15 text-emerald-400" id="modalAvatar">—</div>
+            <div>
+                <h2 class="font-black text-lg leading-none" id="modalTitle">—</h2>
+                <p class="text-[var(--muted)] text-xs mt-1" id="modalSubtitle">—</p>
+            </div>
+        </div>
+        <button onclick="closeModal()" class="text-[var(--muted)] hover:text-white text-2xl transition">×</button>
+    </div>
+
+    <!-- Scrollable Body -->
+    <div class="overflow-y-auto flex-1 px-7 py-6 space-y-5" id="modalBody"></div>
+
+    <!-- Footer -->
+    <div class="px-7 py-4 border-t border-[var(--border)] shrink-0 flex gap-3" id="modalFooter"></div>
+</div>
+</div>
+
+<!-- =============================== EDIT MODAL =============================== -->
+<div id="editModal" class="modal-overlay fixed inset-0 z-[999980] hidden items-center justify-center p-4">
+<div class="edit-box">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-7 py-5 border-b border-[var(--border)] shrink-0">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-violet-500/15 flex items-center justify-center">
+                <i class="fa-solid fa-pen-to-square text-violet-400"></i>
+            </div>
+            <div>
+                <h3 class="font-black text-base leading-none">تعديل بيانات المشروع</h3>
+                <p class="text-[var(--muted)] text-xs mt-1" id="editSubtitle">—</p>
+            </div>
+        </div>
+        <button onclick="closeEdit()" class="text-[var(--muted)] hover:text-white text-2xl transition leading-none">×</button>
+    </div>
+
+    <!-- Body -->
+    <div class="overflow-y-auto flex-1 px-7 py-6 space-y-5">
+
+        <!-- 1. VIDEO -->
+        <div>
+            <label class="block text-sm font-bold mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-video text-blue-400"></i> الفيديو
+            </label>
+
+            <!-- Existing video preview -->
+            <div id="existingVideoWrap" class="hidden mb-3">
+                <div class="relative rounded-2xl overflow-hidden bg-[var(--bg)] border border-[var(--border)]">
+                    <img id="existingThumb" src="" class="w-full h-40 object-cover">
+                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center cursor-pointer hover:bg-black/30 transition"
+                        onclick="playEditVideo()">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-full border border-white/30 flex items-center justify-center">
+                            <i class="fa-solid fa-play text-white"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-2 right-2 flex gap-2">
+                        <span id="existingDuration" class="text-white text-xs bg-black/60 px-2 py-0.5 rounded-lg"></span>
+                    </div>
+                    <button onclick="clearExistingVideo()"
+                        class="absolute top-2 left-2 w-8 h-8 bg-red-500/80 hover:bg-red-500 rounded-lg text-white text-sm flex items-center justify-center transition"
+                        title="حذف الفيديو الحالي واستبداله">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+                <p class="text-xs text-[var(--muted)] mt-2 text-center">
+                    <i class="fa-solid fa-info-circle ml-1"></i>يوجد فيديو حالي — اضغط 🗑 لاستبداله أو احتفظ به كما هو
+                </p>
+            </div>
+
+            <!-- Upload Zone -->
+            <div id="uploadZone" class="upload-zone">
+                <input type="file" id="videoFile" accept="video/*" onchange="onVideoSelected(event)">
+                <i class="fa-solid fa-cloud-arrow-up text-3xl text-[var(--muted)] mb-3 block"></i>
+                <p class="font-bold text-sm">اسحب الفيديو هنا أو اضغط للاختيار</p>
+                <p class="text-[var(--muted)] text-xs mt-1">MP4, MOV, AVI — حتى 200MB</p>
+            </div>
+
+            <!-- Selected file preview -->
+            <div id="selectedFilePreview" class="hidden mt-3 bg-[var(--surface2)] border border-[var(--border)] rounded-2xl p-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-500/15 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid fa-film text-blue-400"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold text-sm truncate" id="selectedFileName">—</p>
+                        <p class="text-[var(--muted)] text-xs" id="selectedFileSize">—</p>
+                    </div>
+                    <button onclick="clearSelectedFile()" class="text-[var(--muted)] hover:text-red-400 transition text-lg">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="progress-bar mt-3 hidden" id="uploadProgress">
+                    <div class="progress-fill" id="uploadProgressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. STATUS -->
+        <div>
+            <label class="block text-sm font-bold mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-circle-half-stroke text-orange-400"></i> الحالة
+            </label>
+            <select id="editStatus" class="edit-input">
+                <option value="pending">⏳ قيد المراجعة</option>
+                <option value="under_review">🔍 جاري المراجعة</option>
+                <option value="approved">✅ مقبول</option>
+                <option value="rejected">❌ مرفوض</option>
+                <option value="published">🌐 منشور</option>
+            </select>
+        </div>
+
+        <!-- 3. PACKAGE TYPE -->
+        <div>
+            <label class="block text-sm font-bold mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-box text-yellow-400"></i> نوع الباقة
+            </label>
+            <div class="grid grid-cols-3 gap-3" id="pkgSelector">
+                <label class="pkg-option cursor-pointer">
+                    <input type="radio" name="editPkg" value="basic" class="hidden" onchange="onPkgChange('basic')">
+                    <div class="pkg-card rounded-xl p-3 text-center border border-[var(--border)] transition hover:border-gray-400"
+                        id="pkg-basic" onclick="selectPkg('basic')">
+                        <div class="text-xl mb-1">🥉</div>
+                        <p class="font-bold text-sm">أساسية</p>
+                        <p class="text-[var(--muted)] text-xs">350 ج</p>
+                    </div>
+                </label>
+                <label class="pkg-option cursor-pointer">
+                    <input type="radio" name="editPkg" value="pro" class="hidden" onchange="onPkgChange('pro')">
+                    <div class="pkg-card rounded-xl p-3 text-center border border-[var(--border)] transition hover:border-blue-400"
+                        id="pkg-pro" onclick="selectPkg('pro')">
+                        <div class="text-xl mb-1">🥈</div>
+                        <p class="font-bold text-sm">Pro</p>
+                        <p class="text-[var(--muted)] text-xs">700 ج</p>
+                    </div>
+                </label>
+                <label class="pkg-option cursor-pointer">
+                    <input type="radio" name="editPkg" value="premium" class="hidden" onchange="onPkgChange('premium')">
+                    <div class="pkg-card rounded-xl p-3 text-center border border-[var(--border)] transition hover:border-purple-400"
+                        id="pkg-premium" onclick="selectPkg('premium')">
+                        <div class="text-xl mb-1">🥇</div>
+                        <p class="font-bold text-sm">Premium</p>
+                        <p class="text-[var(--muted)] text-xs">1200 ج</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- 4. PACKAGE PRICE -->
+        <div>
+            <label class="block text-sm font-bold mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-coins text-yellow-400"></i> سعر الباقة
+            </label>
+            <!-- Price is auto-set from packageType (schema enum: 350 | 700 | 1200) -->
+            <div class="bg-[var(--surface2)] border border-[var(--border)] rounded-xl px-4 py-3 flex items-center justify-between">
+                <span class="text-[var(--muted)] text-sm">السعر المحسوب تلقائياً</span>
+                <span class="font-black text-yellow-400 text-lg" id="editPriceDisplay">—</span>
+            </div>
+            <!-- hidden field carries the value -->
+            <input type="hidden" id="editPrice">
+            <p class="text-[var(--muted)] text-xs mt-1 flex items-center gap-1">
+                <i class="fa-solid fa-lock text-xs"></i>
+                السعر مربوط بنوع الباقة (350 / 700 / 1200) حسب الـ Schema
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="px-7 py-4 border-t border-[var(--border)] shrink-0 flex gap-3">
+        <button onclick="closeEdit()" id="editCancelBtn"
+            class="flex-1 py-3 rounded-xl border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--muted)] font-bold text-sm transition">
+            إلغاء
+        </button>
+        <button onclick="submitEdit()" id="editSaveBtn"
+            class="flex-2 px-8 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-sm transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-floppy-disk" id="editSaveIcon"></i>
+            <span id="editSaveText">حفظ التعديلات</span>
+        </button>
+    </div>
+</div>
+</div>
+
+<!-- =============================== CONFIRM APPROVE MODAL =============================== -->
+<div id="confirmModal" class="modal-overlay fixed inset-0 z-[999990] hidden items-center justify-center p-4">
+<div class="confirm-box">
+    <div class="flex items-center gap-4 mb-5">
+        <div class="w-14 h-14 rounded-2xl bg-emerald-500/15 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-paper-plane text-emerald-400 text-2xl"></i>
+        </div>
+        <div>
+            <h3 class="font-black text-lg">قبول المشروع وإرسال إيميل</h3>
+            <p class="text-[var(--muted)] text-sm mt-0.5">سيتم إشعار صاحب المشروع فوراً</p>
+        </div>
+    </div>
+
+    <!-- Project Info -->
+    <div class="bg-[var(--surface2)] border border-[var(--border)] rounded-2xl p-4 mb-5 space-y-2">
+        <div class="flex justify-between text-sm">
+            <span class="text-[var(--muted)]">المشروع</span>
+            <span class="font-bold" id="confirmProjectName">—</span>
+        </div>
+        <div class="flex justify-between text-sm">
+            <span class="text-[var(--muted)]">صاحب المشروع</span>
+            <span class="font-bold" id="confirmOwner">—</span>
+        </div>
+        <div class="flex justify-between text-sm">
+            <span class="text-[var(--muted)]">الإيميل</span>
+            <span class="font-bold text-blue-400 text-xs" id="confirmEmail">—</span>
+        </div>
+        <div class="border-t border-[var(--border)] pt-2 flex justify-between text-sm">
+            <span class="text-[var(--muted)]">الباقة</span>
+            <span class="font-bold" id="confirmPkg">—</span>
+        </div>
+        <div class="flex justify-between text-sm">
+            <span class="text-[var(--muted)]">سعر الباقة</span>
+            <span class="font-bold text-yellow-400" id="confirmPrice">—</span>
+        </div>
+    </div>
+
+    <!-- Email preview -->
+    <div class="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-4 mb-6 text-sm">
+        <p class="font-bold text-blue-300 mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-envelope"></i> محتوى الإيميل اللي هيتبعت
+        </p>
+        <p class="text-[var(--muted)] leading-relaxed text-xs">
+            "تم قبول مشروعك <strong class="text-[var(--text)]" id="confirmProjectName2">—</strong> على منصة StartupRelly! 🎉<br>
+            المشروع الآن في انتظار إتمام الدفع للباقة المختارة."
+        </p>
+    </div>
+
+    <div class="flex gap-3">
+        <button onclick="closeConfirm()" id="confirmCancelBtn"
+            class="flex-1 py-3 rounded-xl border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--muted)] font-bold text-sm transition">
+            إلغاء
+        </button>
+        <button onclick="executeApprove()" id="confirmApproveBtn"
+            class="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-paper-plane" id="confirmIcon"></i>
+            <span id="confirmBtnText">تأكيد الإرسال</span>
+        </button>
+    </div>
+</div>
+</div>
+
+<!-- Toast -->
+<div id="toast">
+    <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-xl"></i>
+    <span id="toastMsg">—</span>
+</div>
+
+<!-- =============================== VIDEO MODAL =============================== -->
+<div id="videoModal" class="modal-overlay fixed inset-0 z-[99999] hidden items-center justify-center p-4">
+<div class="w-full max-w-3xl">
+    <div class="flex justify-between items-center mb-3">
+        <p class="text-white font-bold text-base" id="videoModalTitle">—</p>
+        <button onclick="closeVideoModal()" class="text-white text-4xl hover:text-red-400 transition">×</button>
+    </div>
+    <video id="adminVideo" class="w-full rounded-2xl max-h-[75vh] bg-black" controls></video>
+</div>
+</div>
+
+<script>
+// ==========================================
+const API_URL        = 'https://startupname-production.up.railway.app/auth/getAllProjectSubmissions';
+const APPROVE_URL    = 'https://startupname-production.up.railway.app/auth/approveProjectSubmission';
+
+let allSubmissions = [];
+let filteredSubmissions = [];
+let currentView = 'table';
+
+// ==========================================
+// STATUS / PACKAGE MAPS
+// ==========================================
+const STATUS_MAP = {
+    pending:      { label: 'قيد المراجعة',  cls: 'badge-pending',      icon: 'fa-clock'             },
+    under_review: { label: 'جاري المراجعة', cls: 'badge-under-review',  icon: 'fa-magnifying-glass'  },
+    approved:     { label: 'مقبول',          cls: 'badge-approved',      icon: 'fa-circle-check'      },
+    rejected:     { label: 'مرفوض',         cls: 'badge-rejected',      icon: 'fa-circle-xmark'      },
+    published:    { label: 'منشور',          cls: 'badge-published',     icon: 'fa-globe'             },
+};
+const PKG_MAP = {
+    basic:   { label: '🥉 أساسية', cls: 'badge-basic'  },
+    pro:     { label: '🥈 Pro',    cls: 'badge-pro'    },
+    premium: { label: '🥇 Premium',cls: 'badge-premium'},
+};
+
+// ==========================================
+// TOAST
+// ==========================================
+let toastTimer;
+function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    const icon = document.getElementById('toastIcon');
+    document.getElementById('toastMsg').textContent = msg;
+    t.className = `show ${type}`;
+    icon.className = type === 'success'
+        ? 'fa-solid fa-circle-check text-emerald-400 text-xl'
+        : 'fa-solid fa-circle-xmark text-red-400 text-xl';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.classList.remove('show'); }, 3500);
+}
+
+// ==========================================
+// APPROVE — open confirm modal
+// ==========================================
+let pendingApproval = null;
+
+function openApprove(id, event) {
+    if (event) event.stopPropagation();
+    const s = allSubmissions.find(x => (x._id || x.id) === id);
+    if (!s) return;
+
+    const pk = PKG_MAP[s.packageType] || { label: s.packageType, cls: 'badge-basic' };
+
+    pendingApproval = {
+        submissionId: s._id || s.id,
+        packageType:  s.packageType  || 'basic',
+        packagePrice: String(s.packagePrice || ''),
+    };
+
+    document.getElementById('confirmProjectName').textContent  = s.project?.name || '—';
+    document.getElementById('confirmProjectName2').textContent = s.project?.name || '—';
+    document.getElementById('confirmOwner').textContent        = s.user?.fullName || '—';
+    document.getElementById('confirmEmail').textContent        = s.user?.email    || '—';
+    document.getElementById('confirmPkg').innerHTML            = `<span class="badge ${pk.cls}">${pk.label}</span>`;
+    document.getElementById('confirmPrice').textContent        = Number(s.packagePrice || 0).toLocaleString() + ' جنيه';
+
+    // reset btn
+    resetConfirmBtn();
+
+    document.getElementById('confirmModal').classList.remove('hidden');
+    document.getElementById('confirmModal').classList.add('flex');
+}
+
+function closeConfirm() {
+    document.getElementById('confirmModal').classList.add('hidden');
+    document.getElementById('confirmModal').classList.remove('flex');
+    pendingApproval = null;
+}
+
+function resetConfirmBtn() {
+    document.getElementById('confirmApproveBtn').disabled = false;
+    document.getElementById('confirmIcon').className = 'fa-solid fa-paper-plane';
+    document.getElementById('confirmBtnText').textContent = 'تأكيد الإرسال';
+    document.getElementById('confirmCancelBtn').disabled = false;
+}
+
+async function executeApprove() {
+    if (!pendingApproval) return;
+
+    // Loading state
+    const btn = document.getElementById('confirmApproveBtn');
+    btn.disabled = true;
+    document.getElementById('confirmCancelBtn').disabled = true;
+    document.getElementById('confirmIcon').className = 'fa-solid fa-spinner fa-spin';
+    document.getElementById('confirmBtnText').textContent = 'جاري الإرسال...';
+
+    try {
+        const res = await fetch(APPROVE_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(pendingApproval),
+        });
+
+        const json = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+            throw new Error(json?.message?.message || json?.message || `HTTP ${res.status}`);
         }
 
-        function showDetails(id) {
-            const sub = submissions.find(s => s.id === id);
-            if (!sub) return;
+        // Mark as approved in local data so button updates without re-fetch
+        const s = allSubmissions.find(x => (x._id || x.id) === pendingApproval.submissionId);
+        if (s) s._approved = true;
 
-            document.getElementById('modalProjectName').textContent = sub.project;
+        closeConfirm();
+        showToast('✅ تم قبول المشروع وإرسال الإيميل بنجاح!', 'success');
 
-            const content = document.getElementById('modalContent');
-            content.innerHTML = `
-        <div>
-            <p class="text-gray-400 text-sm">الاسم</p>
-            <p class="text-lg">${sub.name}</p>
-            
-            <p class="text-gray-400 text-sm mt-6">رقم التليفون</p>
-            <p class="text-lg">${sub.phone}</p>
-            
-            <p class="text-gray-400 text-sm mt-6">الإيميل</p>
-            <p class="text-lg">${sub.email}</p>
-            
-            <p class="text-gray-400 text-sm mt-6">المبلغ المطلوب</p>
-            <p class="text-2xl font-bold text-emerald-400">${sub.amount.toLocaleString()} جنيه</p>
+        // Refresh table/cards to reflect button state
+        applyFilters();
+
+        // Also refresh full data after 2s
+        setTimeout(fetchSubmissions, 2000);
+
+    } catch (err) {
+        console.error(err);
+        showToast('❌ ' + err.message, 'error');
+        resetConfirmBtn();
+    }
+}
+
+// ==========================================
+// FETCH
+// ==========================================
+async function fetchSubmissions() {
+    const icon = document.getElementById('refreshIcon');
+    icon.classList.add('fa-spin');
+
+    try {
+        const res  = await fetch(API_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        allSubmissions = json?.message?.data?.submissions || [];
+        document.getElementById('lastUpdate').textContent =
+            'آخر تحديث: ' + new Date().toLocaleTimeString('ar-EG');
+        updateStats();
+        applyFilters();
+    } catch (err) {
+        console.error(err);
+        document.getElementById('tableBody').innerHTML = `
+            <tr><td colspan="10" class="px-4 py-16 text-center text-red-400">
+                <i class="fa-solid fa-triangle-exclamation text-3xl mb-3 block"></i>
+                فشل تحميل البيانات: ${err.message}
+                <br><button onclick="fetchSubmissions()" class="mt-4 bg-emerald-600 text-white px-6 py-2 rounded-xl font-bold text-sm hover:bg-emerald-500 transition">إعادة المحاولة</button>
+            </td></tr>
+        `;
+    } finally {
+        icon.classList.remove('fa-spin');
+    }
+}
+
+// ==========================================
+// STATS
+// ==========================================
+function updateStats() {
+    document.getElementById('statTotal').textContent  = allSubmissions.length;
+    document.getElementById('statAmount').textContent =
+        Number(allSubmissions.reduce((s, x) => s + (x.project?.amountNeeded || 0), 0)).toLocaleString('ar-EG');
+    document.getElementById('statRevenue').textContent =
+        Number(allSubmissions.reduce((s, x) => s + (x.packagePrice || 0), 0)).toLocaleString('ar-EG');
+    document.getElementById('statVideos').textContent =
+        allSubmissions.filter(x => x.video?.secure_url).length;
+}
+
+// ==========================================
+// FILTERS
+// ==========================================
+function applyFilters() {
+    const q   = document.getElementById('searchInput').value.trim().toLowerCase();
+    const st  = document.getElementById('filterStatus').value;
+    const pkg = document.getElementById('filterPackage').value;
+    const vid = document.getElementById('filterVideo').value;
+
+    filteredSubmissions = allSubmissions.filter(s => {
+        const name  = (s.project?.name || '').toLowerCase();
+        const uname = (s.user?.fullName || '').toLowerCase();
+        const email = (s.user?.email || '').toLowerCase();
+        if (q && !name.includes(q) && !uname.includes(q) && !email.includes(q)) return false;
+        if (st  && s.status !== st)        return false;
+        if (pkg && s.packageType !== pkg)  return false;
+        if (vid === 'yes' && !s.video?.secure_url) return false;
+        if (vid === 'no'  &&  s.video?.secure_url) return false;
+        return true;
+    });
+
+    document.getElementById('resultsCount').textContent =
+        `يعرض ${filteredSubmissions.length} من ${allSubmissions.length} طلب`;
+
+    if (currentView === 'table') renderTable();
+    else renderCards();
+}
+
+// ==========================================
+// VIEW TOGGLE
+// ==========================================
+function setView(v) {
+    currentView = v;
+    document.getElementById('tableView').classList.toggle('hidden', v !== 'table');
+    document.getElementById('cardsView').classList.toggle('hidden', v !== 'cards');
+    document.getElementById('btnTable').classList.toggle('active', v === 'table');
+    document.getElementById('btnCards').classList.toggle('active', v === 'cards');
+    if (v === 'table') renderTable();
+    else renderCards();
+}
+
+// ==========================================
+// RENDER TABLE
+// ==========================================
+function renderTable() {
+    const tbody = document.getElementById('tableBody');
+    if (!filteredSubmissions.length) {
+        tbody.innerHTML = `<tr><td colspan="10" class="px-4 py-16 text-center text-[var(--muted)]">
+            <i class="fa-solid fa-magnifying-glass text-3xl mb-3 block"></i>لا توجد نتائج</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = filteredSubmissions.map((s, i) => {
+        const st  = STATUS_MAP[s.status] || { label: s.status, cls: 'badge-pending', icon: 'fa-circle' };
+        const pk  = PKG_MAP[s.packageType] || { label: s.packageType, cls: 'badge-basic' };
+        const initials = (s.user?.fullName || '—').split(' ').map(w => w[0]).slice(0,2).join('');
+        const avatarColor = ['bg-blue-500/20 text-blue-300','bg-purple-500/20 text-purple-300','bg-yellow-500/20 text-yellow-300','bg-pink-500/20 text-pink-300'][i % 4];
+
+        const thumbHtml = s.video?.thumbnailUrl
+            ? `<div class="thumb-wrap" onclick="playVideo('${s.video.secure_url}','${(s.project?.name||'').replace(/'/g,"\\'")}')">
+                   <img src="${s.video.thumbnailUrl}" onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center text-[var(--muted)] text-xs\'>خطأ</div>'">
+                   <div class="thumb-play"><i class="fa-solid fa-play text-white text-xs"></i></div>
+               </div>`
+            : `<span class="text-[var(--muted)] text-xs">—</span>`;
+
+        return `
+        <tr class="cursor-pointer" onclick="openDetail('${s._id || s.id}')">
+            <td class="px-4 py-3 text-[var(--muted)] text-xs font-mono">${i+1}</td>
+            <td class="px-4 py-3">
+                <div class="flex items-center gap-2">
+                    <div class="avatar ${avatarColor} text-xs flex-shrink-0" style="width:32px;height:32px;border-radius:8px;">${initials}</div>
+                    <div>
+                        <p class="font-bold text-xs whitespace-nowrap">${s.user?.fullName || '—'}</p>
+                        <p class="text-[var(--muted)] text-[10px]">${s.user?.phone || '—'}</p>
+                    </div>
+                </div>
+            </td>
+            <td class="px-4 py-3 max-w-[180px]">
+                <p class="font-bold text-xs line-clamp-1">${s.project?.name || '—'}</p>
+                <p class="text-[var(--muted)] text-[10px] line-clamp-1">${s.businessModel || '—'}</p>
+            </td>
+            <td class="px-4 py-3" onclick="event.stopPropagation()">${thumbHtml}</td>
+            <td class="px-4 py-3 font-bold text-emerald-400 whitespace-nowrap text-xs">
+                ${Number(s.project?.amountNeeded || 0).toLocaleString('ar-EG')} ج
+            </td>
+            <td class="px-4 py-3 font-bold text-xs">${s.project?.equityPercentage || '—'}%</td>
+            <td class="px-4 py-3">
+                <span class="badge ${pk.cls}">${pk.label}</span>
+                <p class="text-[var(--muted)] text-[10px] mt-1">${Number(s.packagePrice||0).toLocaleString()} ج</p>
+            </td>
+            <td class="px-4 py-3">
+                <span class="badge ${st.cls}"><i class="fa-solid ${st.icon} text-[9px]"></i>${st.label}</span>
+            </td>
+            <td class="px-4 py-3 text-[var(--muted)] text-xs whitespace-nowrap">
+                ${formatDate(s.createdAt)}
+            </td>
+            <td class="px-4 py-3" onclick="event.stopPropagation()">
+                <div class="flex gap-1">
+                    <button class="action-btn btn-edit" onclick="openEdit('${s._id || s.id}', event)" title="تعديل">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button class="action-btn btn-view" onclick="openDetail('${s._id || s.id}')">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                    <button class="action-btn btn-wa" onclick="waContact('${s.user?.phone}')">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </button>
+                    <button class="action-btn ${s._approved || s.status === 'approved' ? 'btn-approved' : 'btn-approve'}"
+                        onclick="openApprove('${s._id || s.id}', event)"
+                        ${s._approved || s.status === 'approved' ? 'disabled title="تم القبول مسبقاً"' : 'title="قبول وإرسال إيميل"'}>
+                        <i class="fa-solid ${s._approved || s.status === 'approved' ? 'fa-circle-check' : 'fa-paper-plane'}"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+// ==========================================
+// RENDER CARDS
+// ==========================================
+function renderCards() {
+    const grid = document.getElementById('cardsGrid');
+    if (!filteredSubmissions.length) {
+        grid.innerHTML = `<div class="col-span-full text-center text-[var(--muted)] py-16">
+            <i class="fa-solid fa-magnifying-glass text-3xl mb-3 block"></i>لا توجد نتائج</div>`;
+        return;
+    }
+
+    grid.innerHTML = filteredSubmissions.map((s, i) => {
+        const st = STATUS_MAP[s.status] || { label: s.status, cls: 'badge-pending' };
+        const pk = PKG_MAP[s.packageType] || { label: s.packageType, cls: 'badge-basic' };
+        const initials = (s.user?.fullName || '—').split(' ').map(w => w[0]).slice(0,2).join('');
+        const avatarColor = ['bg-blue-500/20 text-blue-300','bg-purple-500/20 text-purple-300','bg-yellow-500/20 text-yellow-300','bg-pink-500/20 text-pink-300'][i % 4];
+
+        return `
+        <div class="detail-section rounded-2xl overflow-hidden hover:border-emerald-500/50 transition cursor-pointer" onclick="openDetail('${s._id || s.id}')">
+            ${s.video?.thumbnailUrl
+                ? `<div class="relative h-36 overflow-hidden" onclick="event.stopPropagation();playVideo('${s.video.secure_url}','${(s.project?.name||'').replace(/'/g,"\\'")}')">
+                       <img src="${s.video.thumbnailUrl}" class="w-full h-full object-cover">
+                       <div class="absolute inset-0 bg-black/40 flex items-center justify-center hover:bg-black/20 transition">
+                           <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-full flex items-center justify-center border border-white/30">
+                               <i class="fa-solid fa-play text-white"></i>
+                           </div>
+                       </div>
+                       <span class="absolute bottom-2 left-2 text-white text-[10px] bg-black/60 px-2 py-0.5 rounded-lg">${formatDur(s.video.duration)}</span>
+                   </div>`
+                : `<div class="h-20 flex items-center justify-center bg-[var(--bg)] border-b border-[var(--border)]">
+                       <i class="fa-solid fa-video-slash text-[var(--muted)] text-2xl"></i>
+                   </div>`}
+            <div class="p-4 space-y-3">
+                <div class="flex items-start justify-between gap-2">
+                    <p class="font-black text-sm line-clamp-2 leading-snug">${s.project?.name || '—'}</p>
+                    <span class="badge ${st.cls} shrink-0 mt-0.5">${st.label}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="avatar ${avatarColor} text-xs" style="width:28px;height:28px;border-radius:7px;font-size:11px;">${initials}</div>
+                    <div>
+                        <p class="text-xs font-bold">${s.user?.fullName || '—'}</p>
+                        <p class="text-[10px] text-[var(--muted)]">${s.user?.phone || '—'}</p>
+                    </div>
+                </div>
+                <div class="flex justify-between text-xs bg-[var(--bg)] rounded-xl px-3 py-2">
+                    <div>
+                        <span class="text-[var(--muted)] text-[10px] block">المطلوب</span>
+                        <span class="font-black text-emerald-400">${Number(s.project?.amountNeeded||0).toLocaleString()} ج</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[var(--muted)] text-[10px] block">الحصة</span>
+                        <span class="font-black">${s.project?.equityPercentage || '—'}%</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[var(--muted)] text-[10px] block">الباقة</span>
+                        <span class="badge ${pk.cls} text-[9px] px-1.5 py-0">${pk.label}</span>
+                    </div>
+                </div>
+                <div class="flex gap-2 pt-1" onclick="event.stopPropagation()">
+                    <button class="action-btn btn-edit flex-1 text-center" onclick="openEdit('${s._id || s.id}', event)">
+                        <i class="fa-solid fa-pen-to-square ml-1"></i>تعديل
+                    </button>
+                    <button class="action-btn btn-view flex-1 text-center" onclick="openDetail('${s._id || s.id}')">
+                        <i class="fa-solid fa-eye ml-1"></i>التفاصيل
+                    </button>
+                    <button class="action-btn btn-wa flex-1 text-center" onclick="waContact('${s.user?.phone}')">
+                        <i class="fa-brands fa-whatsapp ml-1"></i>واتساب
+                    </button>
+                    <button class="action-btn ${s._approved || s.status === 'approved' ? 'btn-approved' : 'btn-approve'} flex-1 text-center"
+                        onclick="openApprove('${s._id || s.id}', event)"
+                        ${s._approved || s.status === 'approved' ? 'disabled' : ''}>
+                        <i class="fa-solid ${s._approved || s.status === 'approved' ? 'fa-circle-check' : 'fa-paper-plane'} ml-1"></i>
+                        ${s._approved || s.status === 'approved' ? 'تم القبول' : 'قبول'}
+                    </button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ==========================================
+// DETAIL MODAL
+// ==========================================
+function openDetail(id) {
+    const s = allSubmissions.find(x => (x._id || x.id) === id);
+    if (!s) return;
+
+    const initials = (s.user?.fullName || '—').split(' ').map(w => w[0]).slice(0,2).join('');
+    const st = STATUS_MAP[s.status] || { label: s.status, cls: 'badge-pending' };
+    const pk = PKG_MAP[s.packageType] || { label: s.packageType, cls: 'badge-basic' };
+
+    document.getElementById('modalAvatar').textContent = initials;
+    document.getElementById('modalTitle').textContent  = s.project?.name || '—';
+    document.getElementById('modalSubtitle').innerHTML =
+        `<span class="badge ${st.cls}">${st.label}</span>
+         <span class="mx-2">·</span>
+         <span class="badge ${pk.cls}">${pk.label}</span>
+         <span class="mx-2">·</span>
+         ${formatDate(s.createdAt)}`;
+
+    // ---- Build sections ----
+    let html = '';
+
+    // Video
+    if (s.video?.secure_url) {
+        html += section('فيديو المشروع', `
+            <div class="relative rounded-xl overflow-hidden cursor-pointer group" onclick="playVideo('${s.video.secure_url}','${(s.project?.name||'').replace(/'/g,"\\'")}')">
+                <img src="${s.video.thumbnailUrl}" class="w-full h-48 object-cover">
+                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 flex items-center justify-center transition">
+                    <div class="w-16 h-16 bg-white/20 backdrop-blur rounded-full border border-white/30 flex items-center justify-center">
+                        <i class="fa-solid fa-play text-white text-xl"></i>
+                    </div>
+                </div>
+                <div class="absolute bottom-3 right-3 bg-black/60 text-white text-xs px-3 py-1 rounded-lg">
+                    <i class="fa-solid fa-clock ml-1"></i>${formatDur(s.video.duration)}
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mt-3">
+                ${detRow('اسم الملف', s.video.originalFileName || '—')}
+                ${detRow('تاريخ الرفع', formatDate(s.video.uploadedAt))}
+                ${detRow('المدة', formatDur(s.video.duration))}
+                ${detRow('Public ID', `<span class="font-mono text-xs text-[var(--muted)]">${s.video.public_id || '—'}</span>`)}
+            </div>
+        `, 'fa-video text-blue-400');
+    } else {
+        html += section('فيديو المشروع',
+            `<div class="flex items-center gap-3 text-[var(--muted)]">
+                <i class="fa-solid fa-video-slash text-2xl"></i>
+                <p>لم يتم رفع فيديو بعد</p>
+            </div>`, 'fa-video text-[var(--muted)]');
+    }
+
+    // Owner
+    html += section('بيانات المقدم', `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            ${detRow('الاسم الكامل', s.user?.fullName || '—')}
+            ${detRow('التليفون', `<a href="tel:${s.user?.phone}" class="text-emerald-400 font-bold hover:underline">${s.user?.phone || '—'}</a>`)}
+            ${detRow('الإيميل', `<a href="mailto:${s.user?.email}" class="text-blue-400 hover:underline text-xs">${s.user?.email || '—'}</a>`)}
+            ${detRow('تاريخ التقديم', formatDate(s.createdAt))}
+            ${detRow('آخر تحديث', formatDate(s.updatedAt))}
+            ${s.reviewedAt ? detRow('تاريخ المراجعة', formatDate(s.reviewedAt)) : ''}
+            ${detRow('submittedBy', s.submittedBy ? s.submittedBy : '<span class="text-[var(--muted)]">—</span>')}
         </div>
-        
-        <div>
-            <p class="text-gray-400 text-sm">النسبة</p>
-            <p class="text-2xl font-bold">${sub.percentage}%</p>
-            
-            <p class="text-gray-400 text-sm mt-6">نوع الباقة</p>
-            <p class="text-lg">${sub.package}</p>
-            
-            <p class="text-gray-400 text-sm mt-6">تاريخ التقديم</p>
-            <p class="text-lg">${sub.date}</p>
-            
-            <p class="text-gray-400 text-sm mt-6">الحالة</p>
-            <span class="px-5 py-2 rounded-full ${sub.status === 'approved' ? 'bg-emerald-500' : 'bg-yellow-500'} text-white inline-block">
-                ${sub.status === 'approved' ? 'موافق عليه' : 'قيد المراجعة'}
-            </span>
+    `, 'fa-user text-purple-400');
+
+    // Project
+    html += section('تفاصيل المشروع', `
+        <div class="space-y-3">
+            ${detRowFull('اسم المشروع', s.project?.name || '—')}
+            ${detRowFull('وصف المشروع', s.project?.description || '—')}
+            ${detRowFull('الدراسة المالية', s.project?.financialStudy || '—')}
+            ${s.achievementsSoFar ? detRowFull('الإنجازات حتى الآن', s.achievementsSoFar) : ''}
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                ${detRow('نموذج العمل', s.businessModel || '—')}
+                ${detRow('حالة المشروع', s.projectStatus || '—')}
+                ${detRow('مدة العمل', s.projectDuration || '—')}
+                ${detRow('نوع الشراكة', s.partnershipType || '—')}
+            </div>
         </div>
+    `, 'fa-lightbulb text-yellow-400');
+
+    // Financial
+    html += section('التفاصيل المالية والقانونية', `
+        <div class="grid grid-cols-2 gap-3">
+            ${detRow('المبلغ المطلوب', `<span class="text-emerald-400 font-black text-lg">${Number(s.project?.amountNeeded||0).toLocaleString()} ج</span>`)}
+            ${detRow('الحصة المطروحة', `<span class="font-black text-lg">${s.project?.equityPercentage || '—'}%</span>`)}
+            ${detRow('الباقة', `<span class="badge ${pk.cls}">${pk.label}</span>`)}
+            ${detRow('سعر الباقة', `<span class="text-yellow-400 font-bold">${Number(s.packagePrice||0).toLocaleString()} ج</span>`)}
+            ${detRow('سجل تجاري', s.hasCommercialRegister ? '<span class="text-emerald-400">✅ نعم</span>' : '<span class="text-red-400">❌ لا</span>')}
+            ${detRow('مقر إداري', s.hasOffice ? '<span class="text-emerald-400">✅ نعم</span>' : '<span class="text-red-400">❌ لا</span>')}
+        </div>
+    `, 'fa-money-bill text-emerald-400');
+
+    // Risk
+    html += section('إقرار المخاطر', `
+        <div class="flex items-start gap-3">
+            <div class="${s.riskAcknowledgment?.accepted ? 'text-emerald-400' : 'text-red-400'} text-xl mt-0.5">
+                <i class="fa-solid ${s.riskAcknowledgment?.accepted ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+            </div>
+            <div>
+                <p class="font-bold text-sm">${s.riskAcknowledgment?.accepted ? 'تم القبول بإقرار المخاطر' : 'لم يتم القبول'}</p>
+                ${s.riskAcknowledgment?.acceptedAt
+                    ? `<p class="text-[var(--muted)] text-xs mt-1">${formatDate(s.riskAcknowledgment.acceptedAt)}</p>`
+                    : ''}
+            </div>
+        </div>
+    `, 'fa-shield-halved text-orange-400');
+
+    // IDs
+    html += section('معرّفات النظام', `
+        <div class="grid grid-cols-1 gap-2">
+            ${detRow('_id', `<span class="font-mono text-xs text-[var(--muted)] break-all">${s._id || '—'}</span>`)}
+            ${detRow('id', `<span class="font-mono text-xs text-[var(--muted)] break-all">${s.id || '—'}</span>`)}
+        </div>
+    `, 'fa-fingerprint text-gray-500');
+
+    document.getElementById('modalBody').innerHTML = html;
+
+    // Footer
+    document.getElementById('modalFooter').innerHTML = `
+        <button onclick="closeModal(); openEdit('${s._id || s.id}', null)"
+            class="flex-1 flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-500 text-white py-3 rounded-xl font-bold text-sm transition">
+            <i class="fa-solid fa-pen-to-square text-lg"></i> تعديل
+        </button>
+        <button onclick="waContact('${s.user?.phone}')"
+            class="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white py-3 rounded-xl font-bold text-sm transition">
+            <i class="fa-brands fa-whatsapp text-lg"></i> واتساب
+        </button>
+        <a href="mailto:${s.user?.email}"
+            class="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl font-bold text-sm transition">
+            <i class="fa-solid fa-envelope text-lg"></i> إيميل
+        </a>
+        ${s.video?.secure_url
+            ? `<button onclick="playVideo('${s.video.secure_url}','${(s.project?.name||'').replace(/'/g,"\\'")}'); closeModal();"
+                class="flex-1 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-bold text-sm transition">
+                <i class="fa-solid fa-play text-lg"></i> فيديو
+            </button>`
+            : ''}
+        <button onclick="closeModal(); openApprove('${s._id || s.id}', null)"
+            class="flex-1 flex items-center justify-center gap-2 ${s._approved || s.status === 'approved' ? 'bg-gray-700 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-500'} text-white py-3 rounded-xl font-bold text-sm transition"
+            ${s._approved || s.status === 'approved' ? 'disabled' : ''}>
+            <i class="fa-solid ${s._approved || s.status === 'approved' ? 'fa-circle-check' : 'fa-paper-plane'} text-lg"></i>
+            ${s._approved || s.status === 'approved' ? 'مقبول' : 'قبول'}
+        </button>
     `;
 
-            document.getElementById('detailsModal').classList.remove('hidden');
-            document.getElementById('detailsModal').classList.add('flex');
+    document.getElementById('detailModal').classList.remove('hidden');
+    document.getElementById('detailModal').classList.add('flex');
+}
+
+function closeModal() {
+    document.getElementById('detailModal').classList.add('hidden');
+    document.getElementById('detailModal').classList.remove('flex');
+}
+
+// ==========================================
+// VIDEO
+// ==========================================
+function playVideo(url, title) {
+    document.getElementById('adminVideo').src = url;
+    document.getElementById('videoModalTitle').textContent = title;
+    document.getElementById('videoModal').classList.remove('hidden');
+    document.getElementById('videoModal').classList.add('flex');
+    document.getElementById('adminVideo').play();
+}
+
+function closeVideoModal() {
+    document.getElementById('adminVideo').pause();
+    document.getElementById('adminVideo').src = '';
+    document.getElementById('videoModal').classList.add('hidden');
+    document.getElementById('videoModal').classList.remove('flex');
+}
+
+// ==========================================
+// WHATSAPP
+// ==========================================
+function waContact(phone) {
+    if (!phone) return;
+    let n = phone.replace(/\D/g, '');
+    if (n.startsWith('0')) n = '2' + n;
+    window.open(`https://wa.me/${n}?text=${encodeURIComponent('مرحباً، تواصل معك من فريق StartupRelly بخصوص مشروعك.')}`, '_blank');
+}
+
+// ==========================================
+// HELPERS
+// ==========================================
+function section(title, content, iconCls = '') {
+    return `
+    <div class="detail-section rounded-2xl overflow-hidden">
+        <div class="flex items-center gap-2 px-5 py-3 border-b border-[var(--border)]">
+            <i class="fa-solid ${iconCls} text-sm"></i>
+            <h3 class="font-bold text-sm">${title}</h3>
+        </div>
+        <div class="p-5">${content}</div>
+    </div>`;
+}
+
+function detRow(label, val) {
+    return `<div class="detail-row pb-2 mb-2">
+        <span class="text-[var(--muted)] text-[10px] block mb-0.5">${label}</span>
+        <span class="font-semibold text-sm">${val}</span>
+    </div>`;
+}
+
+function detRowFull(label, val) {
+    return `<div class="detail-row pb-3 mb-3">
+        <span class="text-[var(--muted)] text-[10px] block mb-1">${label}</span>
+        <p class="font-medium text-sm leading-relaxed">${val}</p>
+    </div>`;
+}
+
+function formatDate(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleDateString('ar-EG', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+function formatDur(sec) {
+    if (!sec) return '—';
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}:${String(s).padStart(2,'0')}`;
+}
+
+// ==========================================
+// EDIT MODAL
+// ==========================================
+const PKG_PRICES  = { basic: 350, pro: 700, premium: 1200 };
+const UPDATE_URL  = id => `https://startupname-production.up.railway.app/auth/updateProjectSubmission/${id}`;
+
+let editingId        = null;
+let selectedVideoFile = null;
+let keepExistingVideo = true; // true = don't touch existing video
+
+function openEdit(id, event) {
+    if (event) event.stopPropagation();
+    const s = allSubmissions.find(x => (x._id || x.id) === id);
+    if (!s) return;
+
+    editingId         = id;
+    selectedVideoFile = null;
+    keepExistingVideo = true;
+
+    document.getElementById('editSubtitle').textContent =
+        (s.project?.name || '—') + ' · ' + (s.user?.fullName || '—');
+
+    // --- Video section ---
+    const existingVideo = s.video?.secure_url;
+    if (existingVideo) {
+        document.getElementById('existingVideoWrap').classList.remove('hidden');
+        document.getElementById('existingThumb').src    = s.video?.thumbnailUrl || '';
+        document.getElementById('existingDuration').textContent = formatDur(s.video?.duration);
+        document.getElementById('existingVideoWrap').dataset.url = s.video.secure_url;
+        // hide upload zone by default (video exists)
+        document.getElementById('uploadZone').classList.add('hidden');
+    } else {
+        document.getElementById('existingVideoWrap').classList.add('hidden');
+        document.getElementById('uploadZone').classList.remove('hidden');
+    }
+    document.getElementById('selectedFilePreview').classList.add('hidden');
+    document.getElementById('videoFile').value = '';
+
+    // --- Status ---
+    document.getElementById('editStatus').value = s.status || 'published';
+
+    // --- Package ---
+    selectPkg(s.packageType || 'basic');
+
+    // --- Price ---
+    document.getElementById('editPrice').value = s.packagePrice || '';
+
+    // reset save btn
+    resetEditBtn();
+
+    document.getElementById('editModal').classList.remove('hidden');
+    document.getElementById('editModal').classList.add('flex');
+}
+
+function closeEdit() {
+    document.getElementById('editModal').classList.add('hidden');
+    document.getElementById('editModal').classList.remove('flex');
+    editingId = null;
+    selectedVideoFile = null;
+}
+
+function clearExistingVideo() {
+    // hide existing preview, show upload zone
+    document.getElementById('existingVideoWrap').classList.add('hidden');
+    document.getElementById('uploadZone').classList.remove('hidden');
+    keepExistingVideo = false;
+}
+
+function clearSelectedFile() {
+    selectedVideoFile = null;
+    document.getElementById('selectedFilePreview').classList.add('hidden');
+    document.getElementById('videoFile').value = '';
+    // if there was an existing video, restore it
+    const s = allSubmissions.find(x => (x._id || x.id) === editingId);
+    if (s?.video?.secure_url) {
+        document.getElementById('existingVideoWrap').classList.remove('hidden');
+        document.getElementById('uploadZone').classList.add('hidden');
+        keepExistingVideo = true;
+    } else {
+        document.getElementById('uploadZone').classList.remove('hidden');
+    }
+}
+
+function onVideoSelected(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    selectedVideoFile = file;
+
+    const sizeMB = (file.size / 1024 / 1024).toFixed(1);
+    document.getElementById('selectedFileName').textContent = file.name;
+    document.getElementById('selectedFileSize').textContent = sizeMB + ' MB';
+    document.getElementById('selectedFilePreview').classList.remove('hidden');
+    document.getElementById('uploadZone').classList.add('hidden');
+}
+
+function playEditVideo() {
+    const url   = document.getElementById('existingVideoWrap').dataset.url;
+    const title = document.getElementById('editSubtitle').textContent;
+    if (url) playVideo(url, title);
+}
+
+// Package selector
+function selectPkg(pkg) {
+    ['basic','pro','premium'].forEach(p => {
+        const card = document.getElementById('pkg-' + p);
+        if (card) {
+            card.style.borderColor = '';
+            card.style.background  = '';
+        }
+    });
+    const colors = { basic: '#9ca3af', pro: '#60a5fa', premium: '#a78bfa' };
+    const bgs    = { basic: 'rgba(156,163,175,.1)', pro: 'rgba(96,165,250,.1)', premium: 'rgba(167,139,250,.1)' };
+    const card   = document.getElementById('pkg-' + pkg);
+    if (card) {
+        card.style.borderColor = colors[pkg] || '#10b981';
+        card.style.background  = bgs[pkg]    || 'rgba(16,185,129,.1)';
+    }
+    // Set price from enum — no custom values allowed (schema: enum [350,700,1200])
+    const price = PKG_PRICES[pkg] || 350;
+    document.getElementById('editPrice').value            = price;
+    const display = document.getElementById('editPriceDisplay');
+    if (display) display.textContent = price.toLocaleString('ar-EG') + ' جنيه';
+}
+
+function onPkgChange(pkg) { selectPkg(pkg); }
+
+function resetEditBtn() {
+    const btn = document.getElementById('editSaveBtn');
+    btn.disabled = false;
+    document.getElementById('editSaveIcon').className = 'fa-solid fa-floppy-disk';
+    document.getElementById('editSaveText').textContent = 'حفظ التعديلات';
+    document.getElementById('editCancelBtn').disabled = false;
+}
+
+async function submitEdit() {
+    if (!editingId) return;
+
+    const statusEl    = document.getElementById('editStatus');
+    const status      = statusEl.value;
+
+    // Get selected package from highlighted card
+    const highlightedCard = document.querySelector('.pkg-card[style*="borderColor"]');
+    const packageType = highlightedCard?.id?.replace('pkg-', '') || 'basic';
+    const packagePrice = PKG_PRICES[packageType]; // always enum value: 350 | 700 | 1200
+
+    if (!status) { showToast('❌ اختر الحالة أولاً', 'error'); return; }
+    if (!packageType) { showToast('❌ اختر نوع الباقة أولاً', 'error'); return; }
+
+    // Loading
+    document.getElementById('editSaveBtn').disabled = true;
+    document.getElementById('editCancelBtn').disabled = true;
+    document.getElementById('editSaveIcon').className = 'fa-solid fa-spinner fa-spin';
+    document.getElementById('editSaveText').textContent = selectedVideoFile ? 'جاري رفع الفيديو...' : 'جاري الحفظ...';
+
+    try {
+        const formData = new FormData();
+        formData.append('status',        status);
+        formData.append('packageType',   packageType);
+        formData.append('packagePrice',  packagePrice);   // Number enum: 350|700|1200
+
+        if (selectedVideoFile) {
+            // Field name must match multer .single() config on backend
+            formData.append('video', selectedVideoFile);
         }
 
-        function closeModal() {
-            document.getElementById('detailsModal').classList.add('hidden');
-            document.getElementById('detailsModal').classList.remove('flex');
+        const res  = await fetch(UPDATE_URL(editingId), {
+            method: 'PATCH',   // backend uses PATCH — change to PUT if needed
+            body: formData,
+            // ⚠️ DO NOT set Content-Type header — browser sets it automatically with boundary for FormData
+        });
+
+        let json = {};
+        try { json = await res.json(); } catch (_) {}
+
+        if (!res.ok) {
+            // Try to extract meaningful error from mongoose validation or custom error
+            const msg = json?.message?.message
+                     || json?.message
+                     || json?.error
+                     || JSON.stringify(json).slice(0, 150)
+                     || `HTTP ${res.status}`;
+            throw new Error(msg);
         }
 
-        function toggleActivation(id) {
-            const sub = submissions.find(s => s.id === id);
-            if (!sub) return;
-
-            if (sub.status === 'approved') {
-                sub.status = 'pending';
-                alert(`تم إلغاء تفعيل مشروع ${sub.project}`);
-            } else {
-                sub.status = 'approved';
-                alert(`تم تفعيل مشروع ${sub.project}`);
-            }
-            renderTable();
+        // Update local record immediately (optimistic)
+        const s = allSubmissions.find(x => (x._id || x.id) === editingId);
+        if (s) {
+            s.status       = status;
+            s.packageType  = packageType;
+            s.packagePrice = packagePrice;
+            // If video was uploaded, update local preview after re-fetch
         }
 
-        // تشغيل الصفحة
-        renderTable();
-    </script>
+        closeEdit();
+        showToast('✅ تم حفظ التعديلات بنجاح!', 'success');
+        applyFilters();
+        updateStats();
+        setTimeout(fetchSubmissions, 2000); // re-fetch to get updated video URL from cloudinary
+
+    } catch (err) {
+        console.error('submitEdit error:', err);
+        showToast('❌ ' + err.message, 'error');
+        resetEditBtn();
+    }
+}
+
+// ==========================================
+// CLOSE ON BACKDROP
+// ==========================================
+document.getElementById('detailModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+document.getElementById('videoModal').addEventListener('click', function(e) {
+    if (e.target === this) closeVideoModal();
+});
+document.getElementById('confirmModal').addEventListener('click', function(e) {
+    if (e.target === this) closeConfirm();
+});
+document.getElementById('editModal').addEventListener('click', function(e) {
+    if (e.target === this) closeEdit();
+});
+
+// ==========================================
+// INIT
+// ==========================================
+fetchSubmissions();
+</script>
 </body>
-
 </html>

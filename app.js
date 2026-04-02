@@ -144,10 +144,7 @@ function renderProjects(projects) {
                     </div>
                 </div>
                 <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center gap-2 text-sm text-gray-600">
-                        <i class="fa-solid fa-users text-emerald-600"></i>
-                        <span>${project.interestedInvestors} مستثمر مهتم</span>
-                    </div>
+
                     <button onclick="openDetails('${project.id}')"
                         class="text-xs border border-emerald-600 text-emerald-600 hover:bg-emerald-50 px-4 py-2 rounded-xl font-bold transition flex items-center gap-1">
                         <i class="fa-solid fa-circle-info"></i> التفاصيل

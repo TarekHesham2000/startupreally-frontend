@@ -11,9 +11,57 @@
         body { font-family: 'Cairo', system-ui, sans-serif; }
         .form-card { transition: all 0.3s; }
         .form-card:hover { box-shadow: 0 20px 25px -5px rgb(16 185 129 / 0.2); }
+
+        /* Package Cards */
+        .package-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+            position: relative;
+            background: white;
+        }
+        .package-card:hover {
+            border-color: #10b981;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(16,185,129,0.15);
+        }
+        .package-card.selected {
+            border-color: #059669;
+            background: #f0fdf4;
+            box-shadow: 0 8px 25px rgba(16,185,129,0.2);
+        }
+        .package-card.selected .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .check-icon {
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.2s;
+        }
+        .package-card.pro-card {
+            border-color: #059669;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+        }
+        .package-card.pro-card.selected {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+        }
     </style>
 </head>
 <body class="bg-gray-50 py-10">
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2 sm:gap-3">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white text-xl sm:text-3xl font-black">SR</div>
+                <span class="text-xl sm:text-3xl font-black tracking-tighter tail-text">StartupReally</span>
+            </a>
+            <a href="/" class="text-emerald-600 font-bold flex items-center gap-2 hover:underline text-sm sm:text-base">
+                <i class="fa-solid fa-arrow-right"></i> الرئيسية
+            </a>
+        </div>
+    </nav>
 
 <!-- زرار الرجوع -->
 <div class="max-w-4xl mx-auto px-4 sm:px-6 mb-4">
@@ -184,6 +232,81 @@
                 </div>
             </div>
 
+            <!-- ===== اختيار الباقة ===== -->
+            <div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2 flex items-center gap-3">
+                    <span class="w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-box text-emerald-600 text-sm"></i>
+                    </span>
+                    اختر الباقة <span class="text-red-500">*</span>
+                </h2>
+                <p class="text-sm text-gray-500 mb-5 mr-11">لازم تختار باقة عشان تكمل التقديم</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+                    <!-- Basic -->
+                    <div class="package-card" id="pkg-basic" onclick="selectPackage('basic','350')">
+                        <div class="check-icon absolute top-4 left-4 w-7 h-7 bg-emerald-500 rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-check text-white text-xs"></i>
+                        </div>
+                        <div class="text-emerald-600 text-xs font-bold mb-2 uppercase tracking-wider">الأساسية</div>
+                        <div class="text-4xl font-black text-gray-800 mb-1">350<span class="text-lg text-gray-500"> ج</span></div>
+                        <div class="text-xs text-gray-400 mb-5">حتى 35,000 جنيه تمويل</div>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500 text-xs"></i> فيديو احترافي + صورة مصغرة</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500 text-xs"></i> إيميل مصمم باسمك</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500 text-xs"></i> تسجيل الفكرة بضمان المنصة</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500 text-xs"></i> رد 100% لو مفيش مستثمر</li>
+                        </ul>
+                    </div>
+
+                    <!-- Pro -->
+                    <div class="package-card pro-card relative" id="pkg-pro" onclick="selectPackage('pro','700')">
+                        <div class="absolute -top-3 right-5 bg-emerald-600 text-white text-xs px-4 py-1 rounded-full font-bold">
+                            الأكثر اختياراً ⭐
+                        </div>
+                        <div class="check-icon absolute top-4 left-4 w-7 h-7 bg-emerald-500 rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-check text-white text-xs"></i>
+                        </div>
+                        <div class="text-emerald-600 text-xs font-bold mb-2 uppercase tracking-wider">Pro</div>
+                        <div class="text-4xl font-black text-gray-800 mb-1">700<span class="text-lg text-gray-500"> ج</span></div>
+                        <div class="text-xs text-gray-400 mb-5">حتى 500,000 جنيه تمويل</div>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500 text-xs"></i> كل خدمات الأساسية</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500 text-xs"></i> أولوية في عرض المشروع</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500 text-xs"></i> تحليل سريع للدراسة</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500 text-xs"></i> دعم مباشر من الفريق</li>
+                        </ul>
+                    </div>
+
+                    <!-- Premium -->
+                    <div class="package-card" id="pkg-premium" onclick="selectPackage('premium','1200')">
+                        <div class="check-icon absolute top-4 left-4 w-7 h-7 bg-emerald-500 rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-check text-white text-xs"></i>
+                        </div>
+                        <div class="text-emerald-600 text-xs font-bold mb-2 uppercase tracking-wider">Premium</div>
+                        <div class="text-4xl font-black text-gray-800 mb-1">1,200<span class="text-lg text-gray-500"> ج</span></div>
+                        <div class="text-xs text-gray-400 mb-5">حتى 2 مليون جنيه تمويل</div>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500 text-xs"></i> كل خدمات Pro</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500 text-xs"></i> عرض لمستثمرين VIP</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500 text-xs"></i> متابعة شخصية من الفريق</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500 text-xs"></i> أعلى أولوية في العرض</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <!-- رسالة خطأ الباقة -->
+                <p id="packageError" class="hidden mt-3 text-red-500 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-circle-exclamation"></i> لازم تختار باقة عشان تكمل
+                </p>
+
+                <!-- Hidden inputs -->
+                <input type="hidden" name="packageType"  id="packageTypeInput"  value="">
+                <input type="hidden" name="packagePrice" id="packagePriceInput" value="">
+            </div>
+
             <!-- ===== إقرار المخاطر ===== -->
             <div class="bg-amber-50 border border-amber-200 rounded-3xl p-6">
                 <label class="flex items-start gap-3 cursor-pointer">
@@ -214,10 +337,51 @@
         </form>
     </div>
 </div>
+    <!-- ===== Footer ===== -->
+    <footer class="bg-gray-900 text-white py-12 mt-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+            <div class="flex justify-center gap-3 mb-4 sm:mb-6">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white text-2xl sm:text-3xl font-black">
+                    SR
+                </div>
+            </div>
+            <p class="text-xl sm:text-2xl font-bold mb-2">StartupReally</p>
+            <p class="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">المنصة اللي بتحول أحلام الشباب المصري للواقع</p>
 
+            <div class="flex flex-wrap justify-center gap-4 sm:gap-8 text-sm text-gray-400">
+                <a href="privacy.html" class="hover:text-white">سياسة الخصوصية</a>
+                <a href="terms.html" class="hover:text-white">شروط الاستخدام</a>
+                <a href="contact.html" class="hover:text-white">اتصل بنا</a>
+            </div>
+            <div class="mt-8 sm:mt-12 text-xs text-gray-500">© 2026 StartupReally - جميع الحقوق محفوظة</div>
+        </div>
+    </footer>
 <script>
     const API_URL = 'https://startupname-production.up.railway.app/auth/createProjectSubmission';
 
+    // ===== اختيار الباقة =====
+    let selectedPackage = null;
+
+    function selectPackage(type, price) {
+        selectedPackage = { type, price };
+
+        // Remove selected from all
+        ['basic','pro','premium'].forEach(p => {
+            document.getElementById('pkg-'+p).classList.remove('selected');
+        });
+
+        // Add selected to chosen
+        document.getElementById('pkg-'+type).classList.add('selected');
+
+        // Set hidden inputs
+        document.getElementById('packageTypeInput').value  = type;
+        document.getElementById('packagePriceInput').value = price;
+
+        // Hide error
+        document.getElementById('packageError').classList.add('hidden');
+    }
+
+    // ===== Error helpers =====
     function showError(msg) {
         document.getElementById('errorText').textContent = msg;
         document.getElementById('errorMsg').classList.remove('hidden');
@@ -227,16 +391,23 @@
         document.getElementById('errorMsg').classList.add('hidden');
     }
 
+    // ===== Submit =====
     document.getElementById('projectForm').addEventListener('submit', async function (e) {
         e.preventDefault();
         hideError();
+
+        // Validate package
+        if (!selectedPackage) {
+            document.getElementById('packageError').classList.remove('hidden');
+            document.getElementById('pkg-basic').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
 
         const btn           = document.getElementById('submitBtn');
         const submitText    = document.getElementById('submitText');
         const submitSpinner = document.getElementById('submitSpinner');
 
         const formData = new FormData();
-
         formData.append('fullName',              this.fullName.value.trim());
         formData.append('phone',                 this.phone.value.trim());
         formData.append('email',                 this.email.value.trim());
@@ -250,10 +421,9 @@
         formData.append('projectDuration',       this.projectDuration.value.trim());
         formData.append('hasCommercialRegister', this.hasCommercialRegister.value);
         formData.append('hasOffice',             this.hasOffice.value);
-
-        // ✅ بيتبعتوا تلقائياً للباك اند من غير ما يظهروا في الفورم
-        formData.append('packageType',   'basic');
-        formData.append('businessModel', 'أونلاين فقط');
+        formData.append('packageType',           selectedPackage.type);
+        formData.append('packagePrice',          selectedPackage.price);
+        formData.append('businessModel',         'أونلاين فقط');
 
         btn.disabled = true;
         submitText.classList.add('hidden');
